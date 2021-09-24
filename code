@@ -1,6 +1,23 @@
-include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-int main(){
+int NBRKILOMETRE = 7; //kilometres d'un tour
+int MINTIME = 25;  //secondes
+int MAXTIME = 40; //secondes
 
-printf("Hello world");
+
+
+int genererTemps(){
+int i ;
+for(i= 0 ; i< 500 ; i++){
+	printf("%d  \n",rand());
+	}
 }
+
+int main()
+{
+genererTemps();
+return 0;
+}
+
