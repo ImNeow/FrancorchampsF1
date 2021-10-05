@@ -1,3 +1,4 @@
 1) faire les secteurs, générer des temps de manière random entre 25 et 40sec par secteur
 2) structure au sens C du terme d'une voiture.
 3) lui faire faire des tours, donc génerer ses temps.
+En cas de crash, l'abandon est pour la séance, pas pour le week-end entier. Lors de l'abandon, la voiture reste classée
