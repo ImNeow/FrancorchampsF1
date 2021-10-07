@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <time.h>
 
 int NBRKILOMETRE = 7; //kilometres d'un tour
@@ -7,17 +8,66 @@ int MINTIME = 25;  //secondes
 int MAXTIME = 40; //secondes
 
 
+///CREATION DE LA STRUCTURE VOITURE
+struct voiture
+{
+    int num;
+    int bestS1;
+    int bestS2;
+    int bestS3;
+};
+typedef struct voiture voiture;
 
-int genererTemps(){
-int i ;
-for(i= 0 ; i< 500 ; i++){
-	printf("%d  \n",rand());
-	}
+
+///Fonction generertemps(int,int)
+///return une valeur aléatoire entre min et max
+int genererTemps(int min, int max,voiture *p_voiture, int pid){
+    int x = 0;
+
+    srand(pid);
+
+    p_voiture->num = pid;
+    p_voiture->bestS1 = (rand()%(max-min))+min;
+    p_voiture->bestS2 = (rand()%(max-min))+min;
+    p_voiture->bestS3 = (rand()%(max-min))+min;
+
+
+
+    return 0;
 }
 
+
+
+///FONCTION MAIN
 int main()
 {
-genererTemps();
-return 0;
-}
+    int p[2],pid,i;
+    struct voiture v1,v2,v3;		//Creation des voitures
 
+
+    genererTemps(MINTIME,MAXTIME,&v1,1);
+    genererTemps(MINTIME,MAXTIME,&v2,2);
+    genererTemps(MINTIME,MAXTIME,&v3,3);
+
+    printf("Voiture n%d  : S1 %d  S2 %d  S3 %d\n",v1.num,v1.bestS1,v1.bestS2,v1.bestS3);
+    printf("Voiture n%d  : S1 %d  S2 %d  S3 %d\n",v2.num,v2.bestS1,v2.bestS2,v2.bestS3);
+    printf("Voiture n%d  : S1 %d  S2 %d  S3 %d\n",v3.num,v3.bestS1,v3.bestS2,v3.bestS3);
+
+
+
+
+
+    if(pipe(p)==-1){
+        printf("Erreur lors de la création des pipes");
+    }
+
+
+
+    if(pid=fork()==0){
+
+
+
+    }
+
+    return 0;
+}
