@@ -7,4 +7,6 @@ tableau de voitures, pouur pouvoir les faire tourner plusieurs tours. Au début 
 Pour calculer les chronos un circuit est "divisé" en trois secteurs, les chronos pour un tour se relèvent comme suit: la voiture commence son tour, passe les cellules de chronométrage du premier secteur, un temps intermédiaire est relevé ->le s1. La voiture continue son tour et passe les cellules chronos suivantes, un deuxième temps intermédiaire est relevé->le s2. La voiture va ensuite finir son tour, passer la ligne d'arrivée et les cellules de chronométrage, un dernier temps intermédiaire est relevé -> le S3, le temps total est ensuite calculé sur l'addition des trois secteurs.
 
 
-COMMENTAIRE TECHNIQUE : LE PROCESSUS FILS HERITE DES DONNEES DU PROCESSUS PERE 
+COMMENTAIRE TECHNIQUE : LE PROCESSUS FILS HERITE DES DONNEES DU PROCESSUS PERE
+
+12/10 étape suivante -> Faire tourner une voiture 5 tours et lui faire afficher BS1 BS2 BS3 et BT ensuite faire tourner 5voitures 5tours et afficher le BS1,2,3 et le BT. Au début on peut le faire de manière séquentielle et ensuite travailler à rendre ca "manuel".
