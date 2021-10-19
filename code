@@ -42,9 +42,29 @@ int genererTemps(int min, int max,voiture *p_voiture, int pid){
 int main()
 {
     int p[2],pid,i;
-    struct voiture v1,v2,v3;		//Creation des voitures
-
-
+    struct voiture v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20;	//Creation des voitures
+    
+    v1.num = 44;
+    v2.num = 77;
+    v3.num = 11;
+    v4.num = 33;
+    v5.num = 3;
+    v6.num = 4;
+    v7.num = 5;
+    v8.num = 18;
+    v9.num = 14;
+    v10.num = 31;
+    v11.num = 16;
+    v12.num = 55;
+    v13.num = 10;
+    v14.num = 22;
+    v15.num = 7;
+    v16.num = 99;
+    v17.num = 9;
+    v18.num = 47;
+    v19.num = 6;
+    v20.num = 63;
+    
     genererTemps(MINTIME,MAXTIME,&v1,1);
     genererTemps(MINTIME,MAXTIME,&v2,2);
     genererTemps(MINTIME,MAXTIME,&v3,3);
