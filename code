@@ -1,93 +1,99 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
 
-int NBRKILOMETRE = 7; //kilometres d'un tour
-int MINTIME = 25;  //secondes
-int MAXTIME = 40; //secondes
-
+int MINTIME = 25000;  //millisecondes
+int MAXTIME = 40000; //millisecondes
 
 ///CREATION DE LA STRUCTURE VOITURE
-struct voiture
-{
+typedef struct voiture{
     int num;
     int bestS1;
     int bestS2;
     int bestS3;
-};
-typedef struct voiture voiture;
+    int bestLap;
+}Voiture;
+
+///COURSE
+int course(Voiture *p_voiture,int min, int max, int randint){
+
+    int tableS1[10],tableS2[10],tableS3[10];    //Tableau de score
+    int i ;                                     //Compteur
+    int temp = 3*max;                           //Variable temporaire utilisé pour le BestLap
+    int best1=max;                              //Temp pour BestS1
+    int best2=max;                              //Temp pour BestS2
+    int best3=max;                              //Temp pour BestS3
+
+    srand(randint);
 
 
-///Fonction generertemps(int,int)
-///return une valeur aléatoire entre min et max
-int genererTemps(int min, int max,voiture *p_voiture, int pid){
-    int x = 0;
-
-    srand(pid);
-
-    p_voiture->num = pid;
-    p_voiture->bestS1 = (rand()%(max-min))+min;
-    p_voiture->bestS2 = (rand()%(max-min))+min;
-    p_voiture->bestS3 = (rand()%(max-min))+min;
+    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
+        tableS1[i] = rand()%(max-min)+min;
+        tableS2[i] = rand()%(max-min)+min;
+        tableS3[i] = rand()%(max-min)+min;
+    }
 
 
+    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
+        if(tableS1[i]<best1){
+            best1 = tableS1[i];
+        }
+        if(tableS2[i]<best2){
+            best2 = tableS2[i];
+        }
+        if(tableS3[i]<best3){
+            best3 = tableS3[i];
+        }
+    }
+
+
+    p_voiture->bestS1 = best1;
+    p_voiture->bestS2 = best2;
+    p_voiture->bestS3 = best3;
+
+    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
+        if(tableS1[i]+tableS2[i]+tableS3[i]<temp){
+            temp = tableS1[i]+tableS2[i]+tableS3[i];
+        }
+    }
+    p_voiture->bestLap = temp;
+
+//Affiche des scores de la course
+/*
+    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
+        printf("\n%d , %d , %d ",tableS1[i],tableS2[i],tableS3[i]);
+    }
+*/
 
     return 0;
 }
-
 
 
 ///FONCTION MAIN
 int main()
 {
-    int p[2],pid,i;
-    struct voiture v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20;	//Creation des voitures
-    
-    v1.num = 44;
-    v2.num = 77;
-    v3.num = 11;
-    v4.num = 33;
-    v5.num = 3;
-    v6.num = 4;
-    v7.num = 5;
-    v8.num = 18;
-    v9.num = 14;
-    v10.num = 31;
-    v11.num = 16;
-    v12.num = 55;
-    v13.num = 10;
-    v14.num = 22;
-    v15.num = 7;
-    v16.num = 99;
-    v17.num = 9;
-    v18.num = 47;
-    v19.num = 6;
-    v20.num = 63;
-    
-    genererTemps(MINTIME,MAXTIME,&v1,1);
-    genererTemps(MINTIME,MAXTIME,&v2,2);
-    genererTemps(MINTIME,MAXTIME,&v3,3);
-
-    printf("Voiture n%d  : S1 %d  S2 %d  S3 %d\n",v1.num,v1.bestS1,v1.bestS2,v1.bestS3);
-    printf("Voiture n%d  : S1 %d  S2 %d  S3 %d\n",v2.num,v2.bestS1,v2.bestS2,v2.bestS3);
-    printf("Voiture n%d  : S1 %d  S2 %d  S3 %d\n",v3.num,v3.bestS1,v3.bestS2,v3.bestS3);
+    int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};//Numéros de voitures
+    struct voiture v[20];	//Creation des voitures
+    int voitureSize = sizeof(v)/sizeof(*v);
+    int i;
 
 
-
-
-
-    if(pipe(p)==-1){
-        printf("Erreur lors de la création des pipes");
+    for(i=0;i<voitureSize;i++){
+        v[i].num = pilotes[i]; //Allocation des numeros de voiture
+        course(&v[i],MINTIME, MAXTIME,v[i].num*i);
     }
 
 
 
-    if(pid=fork()==0){
 
-
-
+    //Affichage
+    printf("N°\t\t S1\t\t\t S2\t\t\t S3\t\t\tBest\n");
+    for(i=0;i<voitureSize;i++){
+        printf("%d\t|\t%.4f\t\t%.4f\t\t%.4f\t\t%.4f\n", v[i].num,(float)v[i].bestS1/1000,(float)v[i].bestS2/1000,(float)v[i].bestS3/1000,(float)v[i].bestLap/1000);
     }
+
+
+
 
     return 0;
 }
+
