@@ -1,17 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int MINTIME = 25000;  //millisecondes
-int MAXTIME = 40000; //millisecondes
+
+///SETTINGS
+int MINTIME = 25000;    //millisecondes
+int MAXTIME = 40000;    //millisecondes
+
 
 ///CREATION DE LA STRUCTURE VOITURE
 typedef struct voiture{
-    int num;
-    int bestS1;
-    int bestS2;
-    int bestS3;
-    int bestLap;
+    int num;                //Numero de voiture
+    int bestSecteur[3];     //Best temps pour chaque secteur (n° = index+1)
+    int bestLap;            //Best Lap
 }Voiture;
+
 
 ///COURSE
 int course(Voiture *p_voiture,int min, int max, int randint){
@@ -19,20 +21,20 @@ int course(Voiture *p_voiture,int min, int max, int randint){
     int tableS1[10],tableS2[10],tableS3[10];    //Tableau de score
     int i ;                                     //Compteur
     int temp = 3*max;                           //Variable temporaire utilisé pour le BestLap
-    int best1=max;                              //Temp pour BestS1
-    int best2=max;                              //Temp pour BestS2
-    int best3=max;                              //Temp pour BestS3
+    int best1=max;                              //Temp pour Secteur1
+    int best2=max;                              //Temp pour Secteur2
+    int best3=max;                              //Temp pour Secteur3
 
     srand(randint);
 
-
+    //Allocation des temps dans les différents tableaux
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
         tableS1[i] = rand()%(max-min)+min;
         tableS2[i] = rand()%(max-min)+min;
         tableS3[i] = rand()%(max-min)+min;
     }
 
-
+    //Récupération et Allocation des meilleurs scores
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
         if(tableS1[i]<best1){
             best1 = tableS1[i];
@@ -44,12 +46,11 @@ int course(Voiture *p_voiture,int min, int max, int randint){
             best3 = tableS3[i];
         }
     }
+    p_voiture->bestSecteur[0] = best1;
+    p_voiture->bestSecteur[1] = best2;
+    p_voiture->bestSecteur[2] = best3;
 
-
-    p_voiture->bestS1 = best1;
-    p_voiture->bestS2 = best2;
-    p_voiture->bestS3 = best3;
-
+    //Récupération du meilleur temps de tour
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
         if(tableS1[i]+tableS2[i]+tableS3[i]<temp){
             temp = tableS1[i]+tableS2[i]+tableS3[i];
@@ -57,10 +58,12 @@ int course(Voiture *p_voiture,int min, int max, int randint){
     }
     p_voiture->bestLap = temp;
 
-//Affiche des scores de la course
+
 /*
+    //Affiche des scores de la course
+    printf("\n\nVoiture n°%d",p_voiture->num);
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
-        printf("\n%d , %d , %d ",tableS1[i],tableS2[i],tableS3[i]);
+        printf("\nTour n°%d :  %.4f  %.4f  %.4f ",i,(float)tableS1[i]/1000,(float)tableS2[i]/1000,(float)tableS3[i]/1000);
     }
 */
 
@@ -71,10 +74,10 @@ int course(Voiture *p_voiture,int min, int max, int randint){
 ///FONCTION MAIN
 int main()
 {
-    int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};//Numéros de voitures
-    struct voiture v[20];	//Creation des voitures
-    int voitureSize = sizeof(v)/sizeof(*v);
-    int i;
+    int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
+    struct voiture v[20];	                                                    //Creation des voitures
+    int voitureSize = sizeof(v)/sizeof(*v);                                     //Récuperation du nombre de pilotes
+    int i;                                                                      //Compteur
 
 
     for(i=0;i<voitureSize;i++){
@@ -85,10 +88,10 @@ int main()
 
 
 
-    //Affichage
-    printf("N°\t\t S1\t\t\t S2\t\t\t S3\t\t\tBest\n");
+    //Affichage des résultats
+    printf("\n\n\n\nRésultats de la course\nN°\t\t S1\t\t\t S2\t\t\t S3\t\t\tBest\n");
     for(i=0;i<voitureSize;i++){
-        printf("%d\t|\t%.4f\t\t%.4f\t\t%.4f\t\t%.4f\n", v[i].num,(float)v[i].bestS1/1000,(float)v[i].bestS2/1000,(float)v[i].bestS3/1000,(float)v[i].bestLap/1000);
+        printf("%d\t|\t%.4f\t\t%.4f\t\t%.4f\t\t%.4f\n", v[i].num,(float)v[i].bestSecteur[0]/1000,(float)v[i].bestSecteur[1]/1000,(float)v[i].bestSecteur[2]/1000,(float)v[i].bestLap/1000);
     }
 
 
