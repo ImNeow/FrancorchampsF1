@@ -1,11 +1,9 @@
 FAIT:
-faire les secteurs, générer des temps de manière random entre 25 et 40sec par secteur   = 
-structure au sens C du terme d'une voiture. 
-lui faire faire des tours, donc génerer ses temps.
-
+faire les secteurs, générer des temps de manière random entre 25 et 40sec par secteur
+structure au sens C du terme d'une voiture
+fork
 
 PAS FAIT:
-fork
 semaphore
 mémoire partagée
 gestion des craches, arrêt au stand
