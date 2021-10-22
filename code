@@ -62,11 +62,12 @@ int course(Voiture *p_voiture,int min, int max, int randint){
 
 
     //Affiche des scores de la course
+    /*
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
         sleep(1);
         printf("\n%d\t Tour n°%d :\t\t%.4f\t\t%.4f\t\t%.4f ",p_voiture->num,i+1,(float)tableS1[i]/1000,(float)tableS2[i]/1000,(float)tableS3[i]/1000);
     }
-
+    */
 
     return 0;
 }
