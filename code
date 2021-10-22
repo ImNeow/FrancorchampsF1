@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 
 ///SETTINGS
@@ -59,13 +60,13 @@ int course(Voiture *p_voiture,int min, int max, int randint){
     p_voiture->bestLap = temp;
 
 
-/*
+
     //Affiche des scores de la course
-    printf("\n\nVoiture n°%d",p_voiture->num);
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
-        printf("\nTour n°%d :  %.4f  %.4f  %.4f ",i,(float)tableS1[i]/1000,(float)tableS2[i]/1000,(float)tableS3[i]/1000);
+        sleep(1);
+        printf("\n%d\t Tour n°%d :\t\t%.4f\t\t%.4f\t\t%.4f ",p_voiture->num,i+1,(float)tableS1[i]/1000,(float)tableS2[i]/1000,(float)tableS3[i]/1000);
     }
-*/
+
 
     return 0;
 }
@@ -78,16 +79,23 @@ int main()
     struct voiture v[20];	                                                    //Creation des voitures
     int voitureSize = sizeof(v)/sizeof(*v);                                     //Récuperation du nombre de pilotes
     int i;                                                                      //Compteur
-
+    pid_t pid;
 
     for(i=0;i<voitureSize;i++){
         v[i].num = pilotes[i]; //Allocation des numeros de voiture
-        course(&v[i],MINTIME, MAXTIME,v[i].num*i);
+        pid = fork();
+
+        if(pid==0){
+            course(&v[i],MINTIME, MAXTIME,i*getpid());
+            exit(0);
+        }
+
+
+
     }
 
 
-
-
+    sleep(10);
     //Affichage des résultats
     printf("\n\n\n\nRésultats de la course\nN°\t\t S1\t\t\t S2\t\t\t S3\t\t\tBest\n");
     for(i=0;i<voitureSize;i++){
