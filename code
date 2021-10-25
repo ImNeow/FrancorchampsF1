@@ -1,11 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 
 ///SETTINGS
 int MINTIME = 25000;    //millisecondes
 int MAXTIME = 40000;    //millisecondes
+int MINTOURESSAI = 40;  //nombre de tour min    P1 & P2: 60-66
+int MAXTOURESSAI = 47;  //nombre de tour max    P1 & P2 : 60-66
+int NBRTOURFINAL = 44;  //nombre de tour de la final(300-350)
+
 
 
 ///CREATION DE LA STRUCTURE VOITURE
@@ -13,64 +18,141 @@ typedef struct voiture{
     int num;                //Numero de voiture
     int bestSecteur[3];     //Best temps pour chaque secteur (n° = index+1)
     int bestLap;            //Best Lap
+    int stand;              //Arrèt au stand
+    int out;                //Crach
 }Voiture;
 
 
-///COURSE
-int course(Voiture *p_voiture,int min, int max, int randint){
+///SEANCE D'ESSAI (P1,P2,P3)
+void essai(Voiture *p_voiture,int min, int max, int randint,int duree){
 
-    int tableS1[10],tableS2[10],tableS3[10];    //Tableau de score
+    srand(randint);
+    int nbrTour = rand()%(MAXTOURESSAI-MINTOURESSAI)+(MINTOURESSAI*duree/60);                            //Calcul de nombre de Tour
+    int tableS1[nbrTour],tableS2[nbrTour],tableS3[nbrTour];    //Tableau de score
     int i ;                                     //Compteur
     int temp = 3*max;                           //Variable temporaire utilisé pour le BestLap
     int best1=max;                              //Temp pour Secteur1
     int best2=max;                              //Temp pour Secteur2
     int best3=max;                              //Temp pour Secteur3
+    int probaCrach = 400;
+    int stopStand = 0;
 
-    srand(randint);
+    for(i=0;i<nbrTour;i++){
+        //Crach Test
+        if(rand()%probaCrach == 1 || p_voiture->out == 1){
+            p_voiture->out=1;
+            tableS1[i] = 0;
+            tableS2[i] = 0;
+            tableS3[i] = 0;
+        }
+        else if((stopStand == 0 && rand()%100 == 1)|| rand()%300 == 1){
+            p_voiture->stand = 1;
+            stopStand = 1;
+            tableS1[i] = rand()%(max-min)+min;
+            tableS2[i] = rand()%(max-min)+min;
+            tableS3[i] = rand()%(max-min)+min+30000;   //30 secondes d'arrèt au stand
+        }else{
+            //Allocation des temps dans les différents tableaux
+            tableS1[i] = rand()%(max-min)+min;
+            tableS2[i] = rand()%(max-min)+min;
+            tableS3[i] = rand()%(max-min)+min;
 
-    //Allocation des temps dans les différents tableaux
-    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
-        tableS1[i] = rand()%(max-min)+min;
-        tableS2[i] = rand()%(max-min)+min;
-        tableS3[i] = rand()%(max-min)+min;
+            //Récupération et Allocation des meilleurs scores
+            if(tableS1[i]<best1){
+                best1 = tableS1[i];
+            }
+            if(tableS2[i]<best2){
+                best2 = tableS2[i];
+            }
+            if(tableS3[i]<best3){
+                best3 = tableS3[i];
+            }
+
+            //Récupération du meilleur temps de tour
+            if(tableS1[i]+tableS2[i]+tableS3[i]<temp){
+                temp = tableS1[i]+tableS2[i]+tableS3[i];
+            }
+        }
     }
 
-    //Récupération et Allocation des meilleurs scores
-    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
-        if(tableS1[i]<best1){
-            best1 = tableS1[i];
-        }
-        if(tableS2[i]<best2){
-            best2 = tableS2[i];
-        }
-        if(tableS3[i]<best3){
-            best3 = tableS3[i];
-        }
-    }
+
     p_voiture->bestSecteur[0] = best1;
     p_voiture->bestSecteur[1] = best2;
     p_voiture->bestSecteur[2] = best3;
-
-    //Récupération du meilleur temps de tour
-    for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
-        if(tableS1[i]+tableS2[i]+tableS3[i]<temp){
-            temp = tableS1[i]+tableS2[i]+tableS3[i];
-        }
-    }
     p_voiture->bestLap = temp;
 
-
-
-    //Affiche des scores de la course
     /*
+    //Affiche des scores de la course
     for(i=0;i<sizeof(tableS1)/sizeof(*tableS1);i++){
-        sleep(1);
-        printf("\n%d\t Tour n°%d :\t\t%.4f\t\t%.4f\t\t%.4f ",p_voiture->num,i+1,(float)tableS1[i]/1000,(float)tableS2[i]/1000,(float)tableS3[i]/1000);
+        printf("\n%d\t Tour n°%d\t\t%.4f\t\t%.4f\t\t%.4f ",p_voiture->num,i+1,(float)tableS1[i]/1000,(float)tableS2[i]/1000,(float)tableS3[i]/1000);
     }
-    */
-
-    return 0;
+     */
 }
+void resetVoiture(Voiture v[],int size){
+    int i,j;
+
+    for(i=0;i<size;i++){
+        for(j=0;j<3;j++){
+            v->bestSecteur[j]=0;
+        }
+        v->bestLap = 0;
+        v->out = 0;
+    }
+}
+
+
+
+///FONCTION DE TRI DES SCORES
+int comp(const Voiture *v1,const Voiture *v2){
+    if(v1->bestLap<v2->bestLap){
+        return -1;
+    }
+    else if(v1->bestLap>v2->bestLap){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+///AFFICHAGE DES RESULTATS DANS UN FICHIER
+void DisplayResult(Voiture p_v[],int size,int nbressai,int type){
+    int i ;
+    FILE* f = fopen("result","a");
+
+    if(type==1){//ESSAI
+        fprintf(f,"\nRésultats de l'essai N° %d \nN°\t\t S1\t\t\t S2\t\t\t S3\t\t\tBest\n",nbressai);
+        for(i=0;i<size;i++){
+            fprintf(f,"%d\t|\t%.4f\t\t%.4f\t\t%.4f\t\t%.4f\n", p_v[i].num,(float)p_v[i].bestSecteur[0]/1000,(float)p_v[i].bestSecteur[1]/1000,(float)p_v[i].bestSecteur[2]/1000,(float)p_v[i].bestLap/1000);
+        }
+    }else if(type==2){//QUALIF
+
+    }else if(type==3){//FINAL
+
+    }
+
+
+    fclose(f);
+
+}
+
+void resetResult(){
+    FILE* f = fopen("result","w");
+    fprintf(f,"");
+}
+
+
+
+///SEANCE DE QUALIFICATION
+void qualif(){
+
+}
+
+///COURSE FINALE
+void course(){
+
+}
+
+
 
 
 ///FONCTION MAIN
@@ -79,30 +161,43 @@ int main()
     int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
     struct voiture v[20];	                                                    //Creation des voitures
     int voitureSize = sizeof(v)/sizeof(*v);                                     //Récuperation du nombre de pilotes
-    int i;                                                                      //Compteur
-    pid_t pid;
+    int i,nbr;
+   // pid_t pid;
 
+   resetResult();//RESET DU FICHIER
+
+    //Allocation des numeros de voiture
     for(i=0;i<voitureSize;i++){
-        v[i].num = pilotes[i]; //Allocation des numeros de voiture
-        pid = fork();
-
-        if(pid==0){
-            course(&v[i],MINTIME, MAXTIME,i*getpid());
-            exit(0);
-        }
-
-
-
+        v[i].num = pilotes[i];
     }
 
 
-    sleep(10);
-    //Affichage des résultats
-    printf("\n\n\n\nRésultats de la course\nN°\t\t S1\t\t\t S2\t\t\t S3\t\t\tBest\n");
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //ESSAI 1
+    nbr = 1;
     for(i=0;i<voitureSize;i++){
-        printf("%d\t|\t%.4f\t\t%.4f\t\t%.4f\t\t%.4f\n", v[i].num,(float)v[i].bestSecteur[0]/1000,(float)v[i].bestSecteur[1]/1000,(float)v[i].bestSecteur[2]/1000,(float)v[i].bestLap/1000);
+        essai(&v[i],MINTIME, MAXTIME,i*v[i].num,90);
     }
+    qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
+    DisplayResult(v,voitureSize,nbr,1);
+    //ESSAI 2
+    nbr = 2;
+    resetVoiture(v,voitureSize);
+    for(i=0;i<voitureSize;i++){
+        essai(&v[i],MINTIME, MAXTIME,i*v[i].num/nbr ,90);
+    }
+    qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
+    DisplayResult(v,voitureSize,nbr,1);
+    //ESSAI 3
+    nbr = 3;
+    resetVoiture(v,voitureSize);
+    for(i=0;i<voitureSize;i++){
+        essai(&v[i],MINTIME, MAXTIME,i*v[i].num/nbr ,90);
+    }
+    qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
+    DisplayResult(v,voitureSize,nbr,1);
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
