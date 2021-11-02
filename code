@@ -3,6 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+
 
 ///SETTINGS
 int MINTIME = 25000;    //millisecondes
@@ -20,6 +23,7 @@ typedef struct voiture{
     int out;                //Crach
 }Voiture;
 
+
 ///CRÉATION DES PROTOTYPES
 void essai(Voiture * ,int , int , int ,int );
 void qualif();
@@ -28,13 +32,16 @@ void resetVoiture(Voiture [],int );
 int comp(const Voiture *,const Voiture *);
 void printLap(int ,int ,int , int , int , int );
 void resetResult();
-
+void test(int vp,int i){
+    printf("%d", vp);
+}
 
 
 
 ///FONCTION MAIN
-int main()
+int main(int argc, char*argv[])
 {
+
     int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
     struct voiture v[20];	                                                    //Creation des voitures
     int voitureSize = sizeof(v)/sizeof(*v);                                     //Récuperation du nombre de pilotes
@@ -48,15 +55,28 @@ int main()
         v[i].num = pilotes[i];
     }
 
+    key_t key;
+    int memPartage;
+    int vp;
+
+    key = ftok(argv[0], 0);                                       //création de la clé
+    memPartage = shmget(key, sizeof(int), IPC_CREAT|0644);        //création de la mémoire partage par rapport à la clé
+    vp = shmat ( memPartage, v, 0);                               //création d'un pointeur vers l'élément qu'on veux alloué dans la memoire partage
+
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //ESSAI 1
     resetVoiture(v,voitureSize);
     for(i=0;i<voitureSize;i++){
-        essai(&v[i],MINTIME, MAXTIME,i*v[i].num,90);
+        //essai(&v[i],MINTIME, MAXTIME,i*v[i].num,90);
+            if(pid=fork()==0){
+                test(vp, i);
+            }
+
     }
 
-    //ESSAI 2
+  /*  //ESSAI 2
     nbr = 2;
     resetVoiture(v,voitureSize);
     for(i=0;i<voitureSize;i++){
@@ -68,10 +88,13 @@ int main()
     for(i=0;i<voitureSize;i++){
         essai(&v[i],MINTIME, MAXTIME,i*v[i].num/nbr ,60);
     }
+    */
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
+
+    shmctl(memPartage, IPC_RMID, NULL);                 //destruction de la mémoire partage
 
     return 0;
 }
