@@ -26,8 +26,8 @@ typedef struct voiture{
     int num;                //Numero de voiture
     int bestSecteur[3];     //Best temps pour chaque secteur (n° = index+1)
     int bestLap;            //Best Lap
-    int stand;              //Arrèt au stand
-    int out;                //Crach
+    int stand;              //Arret au stand
+    int out;                //Crash
 }Voiture;
 
 
@@ -115,7 +115,7 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
         while(enCourse){
             sleep(1);
 
-            if((nbr = rand()%probaCrach )== 1||nbr==2||nbr==3|| p_voiture[index].out == 1){//Crach Test
+            if((nbr = rand()%probaCrach )== 1||nbr==2||nbr==3|| p_voiture[index].out == 1){//Crash Test
                 p_voiture[index].out=1;
                 tableS1[tourActuelle] = 0;
                 tableS2[tourActuelle] = 0;
