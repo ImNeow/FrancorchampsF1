@@ -1,5 +1,5 @@
 # ProjetOS  
-> Formule 1 projet pour l'Ephec
+> Formule 1 projet pour l'EPHEC
 ## Build  
 To build the program you can either :
 `gcc main.c`
@@ -8,16 +8,16 @@ either use `make`
 ## todo  
 - [x] faire les secteurs, générer des temps de manière random entre 25 et 40sec par secteur
 - [x] structure au sens C du terme d'une voiture
+- [x] mémoire partagée
+- [x] gestion des craches, arrêt au stand
+- [x] le temps différent de chaque séance: P1: 1h30, P2:1h30, P3:1h
+- [x] si crash arrive dans un autre secteur que le s1, les scores doivent être gardés en mémoire.
 - [x] fork
 
-PAS FAIT:
 - [ ] semaphore
-- [ ] mémoire partagée
-- [ ] gestion des craches, arrêt au stand
-- [ ] le temps différent de chaque séance: P1: 1h30, P2:1h30, P3:1h
 - [ ] la qualif est une autre fonction que les essais: Q1:18min, Q2:15min, Q3:12min. La qualif élimine 5 voitures par séance, sauf Q3 qui n'élimine rien.
 - [ ] Dans la fonction Qualif créer un tableau vide qui se remplit à chaque fin de session avec les 5 voitures les plus lentes éliminiées sauf en Q3 où le temps des 10 voitures tel quel est envoyé dans le tableau
-- [ ] si crash arrive dans un autre secteur que le s1, les scores doivent être gardés en mémoire.
+
 
 
 ## NOTE:  
