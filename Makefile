@@ -7,3 +7,5 @@ build:
 	gcc $(in) -o $(out)
 run:
 	./$(out)
+clean:
+	rm $(out)
