@@ -1,61 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <stdbool.h>
-#include <semaphore.h>
-
-
-
-///SETTINGS
-int MINTIME = 25000;    //millisecondes
-int MAXTIME = 40000;    //millisecondes
-int MINTOURESSAI = 40;  //nombre de tour min    P1 & P2: 60-66
-int MAXTOURESSAI = 47;  //nombre de tour max    P1 & P2 : 60-66
-//int NBRTOURFINAL = 44;  //nombre de tour de la final(300-350)
-bool enCourse = true;
-
-
-
-
-///CREATION DE LA STRUCTURE VOITURE
-typedef struct voiture{
-    int num;                //Numero de voiture
-    int bestSecteur[3];     //Best temps pour chaque secteur (n° = index+1)
-    int bestLap;            //Best Lap
-    int stand;              //Arret au stand
-    int out;                //Crash
-}Voiture;
-
-
-
-///CRÉATION DES PROTOTYPES
-void essai(Voiture *,int ,int , int , int ,int );
-void lancerEssai(Voiture *);
-void printLap(int ,int ,int , int , int , int );
-void qualif();
-void course();
-void resetVoiture(Voiture [],int );
-int comp(const Voiture *,const Voiture *);
-void resetResult();
-
-
-
+#include "lib.h"
 
 ///FONCTION MAIN
-int main()
-{
-
+int main(){
     int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
     struct voiture * v = malloc(sizeof(Voiture)*20);	                                                    //Creation des voitures
     int voitureSize = 20;                                     //Récuperation du nombre de pilotes
     int i;
 
     //resetResult();//RESET DU FICHIER
-
 
     ///SHARED MEMORY
     int key;
@@ -72,22 +24,14 @@ int main()
     lancerEssai(v);
 
     //Reset voiture
-
-
-
-
-
     printf("VOITURE    S1       S2       S3       TOUR       GAP    STAND \n");
     printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
     for(i=0;i<voitureSize;i++){
         printf("%d\t|\t%d\t%d\t%d\t|\t%d\n",v[i].num,v[i].bestSecteur[0],v[i].bestSecteur[1],v[i].bestSecteur[2],v[i].bestLap);
     }
-
     //qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
-
     return 0;
 }
-
 
 ///SEANCE D'ESSAI (P1,P2,P3)
 void lancerEssai(Voiture * v){
@@ -100,9 +44,7 @@ void lancerEssai(Voiture * v){
     enCourse = false;
 }
 
-
 void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree){
-
     srand(randint*time(NULL)%100);
     int nbrTour = rand()%(MAXTOURESSAI-MINTOURESSAI)+(MINTOURESSAI*duree/60);                            //Calcul de nombre de Tour
     int tableS1[nbrTour],tableS2[nbrTour],tableS3[nbrTour];    //Tableau de score
@@ -152,49 +94,47 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
                 if (tableS1[tourActuelle] + tableS2[tourActuelle] + tableS3[tourActuelle] < p_voiture[index].bestLap || p_voiture[index].bestLap == 0) {
                     p_voiture[index].bestLap = tableS1[tourActuelle] + tableS2[tourActuelle] + tableS3[tourActuelle];
                 }
-
-
                 printf("N°%d \t: \t%d\t%d\t%d \t%d\n",p_voiture[index].num,tableS1[tourActuelle],tableS2[tourActuelle],tableS3[tourActuelle],tableS1[tourActuelle]+tableS2[tourActuelle]+tableS3[tourActuelle]);
                 tourActuelle++;
-
             }
         }
-
     }
 }
 
-
+// resetVoiture set all Voiture from the array to 0
 void resetVoiture(Voiture v[],int size){
+  for (int i = 0; i < size; i++) {
+    v[i] = (Voiture){0};
+  }
+  /*
     int i,j;
-
     for(i=0;i<size;i++){
         for(j=0;j<3;j++){
-            v->bestSecteur[j]=0;
+            v[i].bestSecteur[j]=0;
         }
         v[i].bestLap = 0;
         v[i].out = 0;
         v[i].stand = 0;
     }
-
+    */
 }
 
-
-
+// resetResult clear the result file
 void resetResult(){
-    FILE* f = fopen("result","w");
-    fclose(f);
+    fclose(fopen("result","w"));
 }
-
 
 ///AFFICHAGE DES RESULTATS DANS UN FICHIER
 void printLap(int numCar,int s1,int s2,int s3,  int out , int stand){
     if(out==1){
-        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t %d\t\n", numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)0,out);
+        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t %d\t\n"
+            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)0,out);
     }else if(stand == 1){
-        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t \t %d\n", numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000,stand);
+        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t \t %d\n"
+            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000,stand);
     }else{
-        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\n", numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000);
-
+        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\n"
+            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000);
     }
 }
 
