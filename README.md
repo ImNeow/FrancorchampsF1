@@ -1,9 +1,6 @@
 # ProjetOS  
 > Formule 1 projet pour l'EPHEC
-## Build  
-To build the program you can either :
-`gcc main.c`
-either use `make`
+
 
 ## todo  
 - [x] faire les secteurs, générer des temps de manière random entre 25 et 40sec par secteur
