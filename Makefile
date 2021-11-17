@@ -4,7 +4,7 @@ out = f1
 main: build run
 
 build:
-	gcc $(in) -o $(out)
+	gcc -O3 $(in) -o $(out)
 run:
 	./$(out)
 clean:

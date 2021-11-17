@@ -52,8 +52,7 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
     int probaCrach = 500;
     int probaStand = 150;
 
-    int pid = fork();
-    if(pid==0){
+    if(fork()==0){
         while(enCourse){
             sleep(1);
 
