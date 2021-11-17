@@ -79,14 +79,15 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
                     tableS3[tourActuel] = rand() % (max - min) + min;
                 }
                 //Récupération et Allocation des meilleurs scores
-                if (tableS1[tourActuel] < p_voiture[index].bestSector[0] || p_voiture[index].bestSector[0]==0) {
-                    p_voiture[index].bestSector[0] = tableS1[tourActuel];
+                int *bestSector = p_voiture[index].bestSector;
+                if (tableS1[tourActuel] < bestSector[0] || bestSector[0]==0) {
+                    bestSector[0] = tableS1[tourActuel];
                 }
-                if (tableS2[tourActuel] < p_voiture[index].bestSector[1] || p_voiture[index].bestSector[1]==0) {
-                    p_voiture[index].bestSector[1] = tableS2[tourActuel];
+                if (tableS2[tourActuel] < bestSector[1] || bestSector[1]==0) {
+                    bestSector[1] = tableS2[tourActuel];
                 }
-                if (tableS3[tourActuel] < p_voiture[index].bestSector[2] || p_voiture[index].bestSector[2]==0) {
-                    p_voiture[index].bestSector[2] = tableS3[tourActuel];
+                if (tableS3[tourActuel] < bestSector[2] || bestSector[2]==0) {
+                    bestSector[2] = tableS3[tourActuel];
                 }
 
                 //Récupération du meilleur temps de tour
@@ -97,7 +98,7 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
                 printf("N°%d \t: \t%d\t%d\t%d \t%d\n"
                     ,p_voiture[index].num,tableS1[tourActuel]
                     ,tableS2[tourActuel],tableS3[tourActuel]
-                    ,tableS1[tourActuel]+tableS2[tourActuel]+tableS3[tourActuel]);
+                    ,tot);
                 tourActuel++;
             }
         }
