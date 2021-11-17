@@ -90,7 +90,8 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
                 }
 
                 //Récupération du meilleur temps de tour
-                if (tableS1[tourActuel] + tableS2[tourActuel] + tableS3[tourActuel] < p_voiture[index].bestLap || p_voiture[index].bestLap == 0) {
+                int tot = tableS1[tourActuel] + tableS2[tourActuel] + tableS3[tourActuel]; 
+                if (tot < p_voiture[index].bestLap || p_voiture[index].bestLap == 0) {
                     p_voiture[index].bestLap = tableS1[tourActuel] + tableS2[tourActuel] + tableS3[tourActuel];
                 }
                 printf("N°%d \t: \t%d\t%d\t%d \t%d\n"
