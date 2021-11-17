@@ -19,7 +19,7 @@ bool enCourse = true;
 // VOITURE struct
 typedef struct voiture{
     int num;                //Numero de voiture
-    int bestSecteur[3];     //Best temps pour chaque secteur (n° = index+1)
+    int bestSector[3];     //Best temps pour chaque secteur (n° = index+1)
     int bestLap;            //Best Lap
     int stand;              //Arret au stand
     int out;                //Crash

@@ -27,7 +27,7 @@ int main(){
     printf("VOITURE    S1       S2       S3       TOUR       GAP    STAND \n");
     printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
     for(i=0;i<voitureSize;i++){
-        printf("%d\t|\t%d\t%d\t%d\t|\t%d\n",v[i].num,v[i].bestSecteur[0],v[i].bestSecteur[1],v[i].bestSecteur[2],v[i].bestLap);
+        printf("%d\t|\t%d\t%d\t%d\t|\t%d\n",v[i].num,v[i].bestSector[0],v[i].bestSector[1],v[i].bestSector[2],v[i].bestLap);
     }
     //qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
     return 0;
@@ -48,7 +48,7 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
     srand(randint*time(NULL)%100);
     int nbrTour = rand()%(MAXTOURESSAI-MINTOURESSAI)+(MINTOURESSAI*duree/60);                            //Calcul de nombre de Tour
     int tableS1[nbrTour],tableS2[nbrTour],tableS3[nbrTour];    //Tableau de score
-    int nbr,tourActuelle=0;
+    int nbr,tourActuel=0;
     int probaCrach = 500;
     int probaStand = 150;
 
@@ -59,43 +59,46 @@ void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree)
 
             if((nbr = rand()%probaCrach )== 1||nbr==2||nbr==3|| p_voiture[index].out == 1){//Crash Test
                 p_voiture[index].out=1;
-                tableS1[tourActuelle] = 0;
-                tableS2[tourActuelle] = 0;
-                tableS3[tourActuelle] = 0;
+                tableS1[tourActuel] = 0;
+                tableS2[tourActuel] = 0;
+                tableS3[tourActuel] = 0;
                 if(nbr>1){
-                    tableS1[tourActuelle] = rand()%(max-min)+min;
+                    tableS1[tourActuel] = rand()%(max-min)+min;
                 }if(nbr>2){
-                    tableS2[tourActuelle] = rand()%(max-min)+min;
+                    tableS2[tourActuel] = rand()%(max-min)+min;
                 }
                 break;
             }
             else {
-                tableS1[tourActuelle] = rand()%(max-min)+min;
-                tableS2[tourActuelle] = rand()%(max-min)+min;
+                tableS1[tourActuel] = rand()%(max-min)+min;
+                tableS2[tourActuel] = rand()%(max-min)+min;
                 if((p_voiture[index].stand == 0 && rand()%100 == 1)|| rand()%probaStand == 1) {//ARRET AU STAND
-                    tableS3[tourActuelle] = rand() % (max - min) + min + 30000;   //30 secondes d'arrèt au stand
+                    tableS3[tourActuel] = rand() % (max - min) + min + 30000;   //30 secondes d'arrèt au stand
                     p_voiture[index].stand = 1;
                 }else{
                     p_voiture[index].stand = 0;
-                    tableS3[tourActuelle] = rand() % (max - min) + min;
+                    tableS3[tourActuel] = rand() % (max - min) + min;
                 }
                 //Récupération et Allocation des meilleurs scores
-                if (tableS1[tourActuelle] < p_voiture[index].bestSecteur[0] || p_voiture[index].bestSecteur[0]==0) {
-                    p_voiture[index].bestSecteur[0] = tableS1[tourActuelle];
+                if (tableS1[tourActuel] < p_voiture[index].bestSector[0] || p_voiture[index].bestSector[0]==0) {
+                    p_voiture[index].bestSector[0] = tableS1[tourActuel];
                 }
-                if (tableS2[tourActuelle] < p_voiture[index].bestSecteur[1] || p_voiture[index].bestSecteur[1]==0) {
-                    p_voiture[index].bestSecteur[1] = tableS2[tourActuelle];
+                if (tableS2[tourActuel] < p_voiture[index].bestSector[1] || p_voiture[index].bestSector[1]==0) {
+                    p_voiture[index].bestSector[1] = tableS2[tourActuel];
                 }
-                if (tableS3[tourActuelle] < p_voiture[index].bestSecteur[2] || p_voiture[index].bestSecteur[2]==0) {
-                    p_voiture[index].bestSecteur[2] = tableS3[tourActuelle];
+                if (tableS3[tourActuel] < p_voiture[index].bestSector[2] || p_voiture[index].bestSector[2]==0) {
+                    p_voiture[index].bestSector[2] = tableS3[tourActuel];
                 }
 
                 //Récupération du meilleur temps de tour
-                if (tableS1[tourActuelle] + tableS2[tourActuelle] + tableS3[tourActuelle] < p_voiture[index].bestLap || p_voiture[index].bestLap == 0) {
-                    p_voiture[index].bestLap = tableS1[tourActuelle] + tableS2[tourActuelle] + tableS3[tourActuelle];
+                if (tableS1[tourActuel] + tableS2[tourActuel] + tableS3[tourActuel] < p_voiture[index].bestLap || p_voiture[index].bestLap == 0) {
+                    p_voiture[index].bestLap = tableS1[tourActuel] + tableS2[tourActuel] + tableS3[tourActuel];
                 }
-                printf("N°%d \t: \t%d\t%d\t%d \t%d\n",p_voiture[index].num,tableS1[tourActuelle],tableS2[tourActuelle],tableS3[tourActuelle],tableS1[tourActuelle]+tableS2[tourActuelle]+tableS3[tourActuelle]);
-                tourActuelle++;
+                printf("N°%d \t: \t%d\t%d\t%d \t%d\n"
+                    ,p_voiture[index].num,tableS1[tourActuel]
+                    ,tableS2[tourActuel],tableS3[tourActuel]
+                    ,tableS1[tourActuel]+tableS2[tourActuel]+tableS3[tourActuel]);
+                tourActuel++;
             }
         }
     }
@@ -106,17 +109,6 @@ void resetVoiture(Voiture v[],int size){
   for (int i = 0; i < size; i++) {
     v[i] = (Voiture){0};
   }
-  /*
-    int i,j;
-    for(i=0;i<size;i++){
-        for(j=0;j<3;j++){
-            v[i].bestSecteur[j]=0;
-        }
-        v[i].bestLap = 0;
-        v[i].out = 0;
-        v[i].stand = 0;
-    }
-    */
 }
 
 // resetResult clear the result file
@@ -126,15 +118,22 @@ void resetResult(){
 
 ///AFFICHAGE DES RESULTATS DANS UN FICHIER
 void printLap(int numCar,int s1,int s2,int s3,  int out , int stand){
-    if(out==1){
+    if(out==1)
         printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t %d\t\n"
-            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)0,out);
-    }else if(stand == 1){
+            , numCar,(float)s1/1000
+            ,(float)s2/1000,(float)s3/1000
+            ,(float)0,out);
+    else if(stand == 1)
         printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t \t %d\n"
-            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000,stand);
-    }else{
+            , numCar,(float)s1/1000
+            ,(float)s2/1000
+            ,(float)s3/1000,(float)(s1+s2+s3)/1000
+            ,stand);
+    else
         printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\n"
-            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000);
-    }
+            , numCar,(float)s1/1000
+            ,(float)s2/1000
+            ,(float)s3/1000
+            ,(float)(s1+s2+s3)/1000);
 }
 
