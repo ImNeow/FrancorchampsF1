@@ -3,7 +3,7 @@
 
 Projet de Simulation de circuit de Formule 1
 
-Ce module a été développé dans le cadre scolaire.  
+Cette application a été développé dans le cadre scolaire.  
 
 Système d'exploitation : Linux
 
