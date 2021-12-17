@@ -1,140 +1,132 @@
-#include "lib.h"
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include "config.h"
+#include "course.h"
+#include "voiture.h"
+#include "result.h"
+
+int NBRVOITURE = 0;
+int TEMPSCOURSE = 0;
+
+int gettypeRace(char *argv[]);
 
 ///FONCTION MAIN
-int main(){
-    int pilotes[20] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
-    struct voiture * v = malloc(sizeof(Voiture)*20);	                                                    //Creation des voitures
-    int voitureSize = 20;                                     //Récuperation du nombre de pilotes
-    int i;
+int main(int argc, char *argv[]){
+    Voiture *car ;
+    int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
+    int nbrTour= 50;
 
-    //resetResult();//RESET DU FICHIER
-
-    ///SHARED MEMORY
-    int key;
-    int shmid = shmget(key, sizeof(Voiture)*20, IPC_CREAT|0666);
-    v=(Voiture*) shmat( shmid, 0, 0);
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //Allocation des numeros de voiture
-    for(i=0;i<voitureSize;i++){
-        v[i].num = pilotes[i];
+    if (argc != 2){
+        perror("Veuillez passer 1 seul paramètre!");
+        exit(EXIT_FAILURE);
     }
 
-    lancerEssai(v);
+    int course_id = gettypeRace(argv);
 
-    //Reset voiture
-    printf("VOITURE    S1       S2       S3       TOUR       GAP    STAND \n");
-    printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-    for(i=0;i<voitureSize;i++){
-        printf("%d\t|\t%d\t%d\t%d\t|\t%d\n",v[i].num,v[i].bestSecteur[0],v[i].bestSecteur[1],v[i].bestSecteur[2],v[i].bestLap);
-    }
-    //qsort(&v,sizeof(v)/sizeof(Voiture),sizeof(Voiture),(int (*) (const void *,const void *))&comp); // TRI
-    return 0;
-}
-
-///SEANCE D'ESSAI (P1,P2,P3)
-void lancerEssai(Voiture * v){
-    int i;
-    for(i=0;i<20;i++){
-
-        essai(v,i,MINTIME,MAXTIME,i*getpid()*v[i].num,90);
-    }
-    sleep(21);
-    enCourse = false;
-}
-
-void essai(Voiture *p_voiture,int index,int min, int max, int randint,int duree){
-    srand(randint*time(NULL)%100);
-    int nbrTour = rand()%(MAXTOURESSAI-MINTOURESSAI)+(MINTOURESSAI*duree/60);                            //Calcul de nombre de Tour
-    int tableS1[nbrTour],tableS2[nbrTour],tableS3[nbrTour];    //Tableau de score
-    int nbr,tourActuelle=0;
-    int probaCrach = 500;
-    int probaStand = 150;
-
-    int pid = fork();
-    if(pid==0){
-        while(enCourse){
-            sleep(1);
-
-            if((nbr = rand()%probaCrach )== 1||nbr==2||nbr==3|| p_voiture[index].out == 1){//Crash Test
-                p_voiture[index].out=1;
-                tableS1[tourActuelle] = 0;
-                tableS2[tourActuelle] = 0;
-                tableS3[tourActuelle] = 0;
-                if(nbr>1){
-                    tableS1[tourActuelle] = rand()%(max-min)+min;
-                }if(nbr>2){
-                    tableS2[tourActuelle] = rand()%(max-min)+min;
-                }
-                break;
-            }
-            else {
-                tableS1[tourActuelle] = rand()%(max-min)+min;
-                tableS2[tourActuelle] = rand()%(max-min)+min;
-                if((p_voiture[index].stand == 0 && rand()%100 == 1)|| rand()%probaStand == 1) {//ARRET AU STAND
-                    tableS3[tourActuelle] = rand() % (max - min) + min + 30000;   //30 secondes d'arrèt au stand
-                    p_voiture[index].stand = 1;
-                }else{
-                    p_voiture[index].stand = 0;
-                    tableS3[tourActuelle] = rand() % (max - min) + min;
-                }
-                //Récupération et Allocation des meilleurs scores
-                if (tableS1[tourActuelle] < p_voiture[index].bestSecteur[0] || p_voiture[index].bestSecteur[0]==0) {
-                    p_voiture[index].bestSecteur[0] = tableS1[tourActuelle];
-                }
-                if (tableS2[tourActuelle] < p_voiture[index].bestSecteur[1] || p_voiture[index].bestSecteur[1]==0) {
-                    p_voiture[index].bestSecteur[1] = tableS2[tourActuelle];
-                }
-                if (tableS3[tourActuelle] < p_voiture[index].bestSecteur[2] || p_voiture[index].bestSecteur[2]==0) {
-                    p_voiture[index].bestSecteur[2] = tableS3[tourActuelle];
-                }
-
-                //Récupération du meilleur temps de tour
-                if (tableS1[tourActuelle] + tableS2[tourActuelle] + tableS3[tourActuelle] < p_voiture[index].bestLap || p_voiture[index].bestLap == 0) {
-                    p_voiture[index].bestLap = tableS1[tourActuelle] + tableS2[tourActuelle] + tableS3[tourActuelle];
-                }
-                printf("N°%d \t: \t%d\t%d\t%d \t%d\n",p_voiture[index].num,tableS1[tourActuelle],tableS2[tourActuelle],tableS3[tourActuelle],tableS1[tourActuelle]+tableS2[tourActuelle]+tableS3[tourActuelle]);
-                tourActuelle++;
-            }
-        }
-    }
-}
-
-// resetVoiture set all Voiture from the array to 0
-void resetVoiture(Voiture v[],int size){
-  for (int i = 0; i < size; i++) {
-    v[i] = (Voiture){0};
-  }
-  /*
-    int i,j;
-    for(i=0;i<size;i++){
-        for(j=0;j<3;j++){
-            v[i].bestSecteur[j]=0;
-        }
-        v[i].bestLap = 0;
-        v[i].out = 0;
-        v[i].stand = 0;
-    }
-    */
-}
-
-// resetResult clear the result file
-void resetResult(){
-    fclose(fopen("result","w"));
-}
-
-///AFFICHAGE DES RESULTATS DANS UN FICHIER
-void printLap(int numCar,int s1,int s2,int s3,  int out , int stand){
-    if(out==1){
-        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t %d\t\n"
-            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)0,out);
-    }else if(stand == 1){
-        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\t \t %d\n"
-            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000,stand);
+    if (course_id == -1){
+        printf("Erreur, parametre invalide");
+        exit(EXIT_FAILURE);
     }else{
-        printf("%d\t|\t %.4f\t %.4f\t %.4f\t %.4f\n"
-            , numCar,(float)s1/1000,(float)s2/1000,(float)s3/1000,(float)(s1+s2+s3)/1000);
+
+        //Création de la mémoire partagée
+        int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
+        car = shmat(shmid, NULL, 0);
+        /*
+        int shmid_sem = shmget(IPC_PRIVATE, sizeof(sem_t), 0666 | IPC_CREAT);
+        sem_t *semaphore = shmat(shmid_sem, NULL, 0);
+        sem_init(semaphore, 1,1);
+        */
+
+        int i =0;
+        pid_t pid;
+        for (i ; i < NBRTOTALVOITURE; i++)
+        {
+            pid = fork();
+            if (pid == 0){
+                break; // Sinon lance 400 processus ????
+
+            }
+        }
+
+        if (pid == -1) {
+            perror("Erreur lors du fork !");
+            exit(EXIT_FAILURE);
+        } else if(pid == 0) {
+
+            if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 || course_id == 6) {
+                course(&car[i],pilotes[i],TEMPSCOURSE);
+            } else if (course_id == 7) {
+                //final();
+            }
+            exit(EXIT_SUCCESS);
+        }
+        else{
+            for(int j=0; j<nbrTour; j++){
+                afficheResult(car);
+                sleep(DELAY);
+
+            }
+        }
+
+
+
+        shmdt(car); //Détachement de la mémoire partagée
+        shmctl(shmid, IPC_RMID, NULL); //Suppression de la mémoire partagée
+        return 0;
     }
+
 }
 
+int gettypeRace(char *argv[]) {
+
+    if(strcmp(argv[1], "P1" ) == 0){
+        NBRVOITURE = 20;
+        TEMPSCOURSE = CHRONO_P1;
+        return 1;
+
+    }
+    else if(strcmp(argv[1], "P2") == 0) {
+        NBRVOITURE = 20;
+        TEMPSCOURSE = CHRONO_P2;
+        return 2;
+
+    }
+    else if(strcmp(argv[1], "P3") == 0) {
+        NBRVOITURE = 20;
+        TEMPSCOURSE = CHRONO_P3;
+        return 3;
+
+    }
+    else if(strcmp(argv[1], "Q1") == 0) {
+        NBRVOITURE = 20;
+        TEMPSCOURSE = CHRONO_Q1;
+        return 4;
+
+    }
+    else if(strcmp(argv[1], "Q2") == 0) {
+        NBRVOITURE = 15;
+        TEMPSCOURSE = CHRONO_Q2;
+        return 5;
+
+    }
+    else if(strcmp(argv[1], "Q3")  == 0) {
+        NBRVOITURE = 10;
+        TEMPSCOURSE = CHRONO_Q3;
+        return 6;
+
+    }
+    else if(strcmp(argv[1], "F")  == 0) {
+        //A completer
+        return 7;
+
+    }
+
+    else {
+        return -1;
+    }
+}
