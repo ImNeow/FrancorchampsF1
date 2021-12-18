@@ -22,11 +22,11 @@ Voici un tableau représentant les différentes tâches à effectuer :
 | Essai | Permettre aux processus de tourner lors de séances d'essai | Tommy Riquet
 | Qualifications | Permettre aux voitures de tourner lors de séances de qualifications | Tommy Riquet
 | Final | Permettre aux voitures de tourner lors de la séance final  | 
-| Accidents | Gerer les accidents | 
+| Accidents | Gerer les accidents | Tommy Riquet
 | Arrèt au stand | Gerer les arrèts au stand | 
 |||
 | Affichage | Gérer et afficher les scores lors d'une course | Tommy Riquet
-| Affichage Best | Gérer et afficher les meilleurs scores lors d'une course |
+| Affichage Best | Gérer et afficher les meilleurs scores lors d'une course | Tommy Riquet
 | Enregistrement | Enregistrer les résultats dans un fichier |
 |||
 | Rapport | Ecrire le rapport |
