@@ -28,5 +28,6 @@ Voici un tableau représentant les différentes tâches à effectuer :
 | Affichage | Gérer et afficher les scores lors d'une course | Tommy Riquet
 | Affichage Best | Gérer et afficher les meilleurs scores lors d'une course |
 | Enregistrement | Enregistrer les résultats dans un fichier |
-
+|||
+| Rapport | Ecrire le rapport |
 
