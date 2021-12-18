@@ -36,7 +36,8 @@ int main(int argc, char *argv[]){
         //Création de la mémoire partagée
         int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
         car = shmat(shmid, NULL, 0);
-        /*
+
+        /*Tentative d'ajouter de sémaphores
         int shmid_sem = shmget(IPC_PRIVATE, sizeof(sem_t), 0666 | IPC_CREAT);
         sem_t *semaphore = shmat(shmid_sem, NULL, 0);
         sem_init(semaphore, 1,1);
@@ -69,8 +70,8 @@ int main(int argc, char *argv[]){
             for(int j=0; j<nbrTour; j++){
                 afficheResult(car);
                 sleep(DELAY);
-
             }
+
         }
 
 
