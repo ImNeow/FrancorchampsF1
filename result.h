@@ -7,5 +7,7 @@
 
 void afficheResult(Voiture *v);
 int tri(const void *a, const void *b);
+int getBestSecteur(int secteur);
+int getBestLap();
 
 #endif //PROJETOS_RESULT_H
