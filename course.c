@@ -7,39 +7,81 @@
 
 void course(Voiture *v,int numVoiture,int tempsCourse){
 
-    srand(getpid()*time(NULL)%100);
+    srand(getpid()+time(NULL));
 
     v->num = numVoiture;
     v->status = 2;
     v->tour = 0;
     v->tempTotal = 0;
 
-    while (v->tempTotal<tempsCourse) {
+    while (v->tempTotal < tempsCourse*1000) {
 
-        v->secteur[0] = genererTemps();
-        v->secteur[1] = genererTemps();
-        v->secteur[2] = genererTemps();
+        //Crach test
+        if(crachTest() || v->out == 1){
+            if(v->out!=1){
+                switch (getRandomSecteur()) {
+                    case 1 :
+                        v->secteur[0] = 0;
+                        v->secteur[1] = 0;
+                        v->secteur[2] = 0;
+                    case 2 :
+                        v->secteur[0] = genererTemps(v->tour);
+                        v->secteur[1] = 0;
+                        v->secteur[2] = 0;
+                    case 3 :
+                        v->secteur[0] = genererTemps(v->tour);
+                        v->secteur[1] = genererTemps(v->tour);
+                        v->secteur[2] = 0;
+                }
+                v->out = 1;
+            }else{
+                v->secteur[0] = 0;
+                v->secteur[1] = 0;
+                v->secteur[2] = 0;
+            }
 
-        //Ajout du temps total
-        v->tempTotal += ((int)(v->secteur[0])/1000)+((int)(v->secteur[1])/1000)+((int)(v->secteur[2])/1000);
-
-        v->tour=v->tour+1;
-
-        //Récupération et Allocation des meilleurs scores
-        if (v->secteur[0] < v->bestSecteur[0] || v->bestSecteur[0]==0) {
-            v->bestSecteur[0] = v->secteur[0];
         }
-        if (v->secteur[1] < v->bestSecteur[1] || v->bestSecteur[1]==0) {
-            v->bestSecteur[1] = v->secteur[1];
-        }
-        if (v->secteur[2] < v->bestSecteur[2] || v->bestSecteur[2]==0) {
-            v->bestSecteur[2] = v->secteur[2];
+        else{
+
+            v->secteur[0] = genererTemps(v->tour);
+            v->secteur[1] = genererTemps(v->tour);
+
+            //Arrèt au stand
+            v->probaStand = 1;
+            if(stand() == v->probaStand){
+                v->secteur[2] = genererTemps(v->tour)+randomStandTime();
+                v->probaStand = PROBASTAND*2;
+                v->stand = 1;
+            }
+            else{
+                v->stand = 0;
+                v->secteur[2] = genererTemps(v->tour);
+            }
+
+
+            //Ajout du temps total
+            v->tempTotal += v->secteur[0]+v->secteur[1]+v->secteur[2];
+
+            //Ajout d'un tour
+            v->tour=v->tour+1;
+
+            //Récupération et Allocation des meilleurs scores
+            if (v->secteur[0] < v->bestSecteur[0] || v->bestSecteur[0]==0) {
+                v->bestSecteur[0] = v->secteur[0];
+            }
+            if (v->secteur[1] < v->bestSecteur[1] || v->bestSecteur[1]==0) {
+                v->bestSecteur[1] = v->secteur[1];
+            }
+            if (v->secteur[2] < v->bestSecteur[2] || v->bestSecteur[2]==0) {
+                v->bestSecteur[2] = v->secteur[2];
+            }
+
+            //Récupération du meilleur temps de tour
+            if (v->secteur[0] + v->secteur[1] + v->secteur[2] < v->bestLap || v->bestLap == 0) {
+                v->bestLap = v->secteur[0] + v->secteur[1] + v->secteur[2];
+            }
         }
 
-        //Récupération du meilleur temps de tour
-        if (v->secteur[0] + v->secteur[1] + v->secteur[2] < v->bestLap || v->bestLap == 0) {
-            v->bestLap = v->secteur[0] + v->secteur[1] + v->secteur[2];
-        }
 
         sleep(DELAY);
     }
