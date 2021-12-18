@@ -14,9 +14,8 @@ typedef struct voiture{
     int bestLap;            //Best Lap
     int tempTotal;          //Temps de course
     int tour;               //Numéro du tour actuel
-    int stand;              //Arret au stand
-    int out;                //Crash
-    int probaout;           //Probabilité d'un crach
+    int stand;              //1 = au stand
+    int out;                //1 = crach
     int probaStand;         //Probabilité d'un arrèt au stand
 }Voiture;
 
