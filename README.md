@@ -1,15 +1,15 @@
 # Présentation
 
-
 Projet de Simulation de circuit de Formule 1
 
 Cette application a été développé dans le cadre scolaire.  
 
 Système d'exploitation : Linux
 
-Auteurs : [Tommy Riquet](https://github.com/Tommyriquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
+Auteurs : [Tommy Riquet](https://github.com/Tommyriquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian), [4zv4l](https://github.com/4zv4l)
 
 ## Compile
+
 Pour compiler le projet `gcc *c`.
 
 ## To Do
