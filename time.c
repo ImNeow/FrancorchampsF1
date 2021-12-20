@@ -5,20 +5,14 @@
 #include <stdlib.h>
 #include "config.h"
 
+// what purpose of nbrTour here ?
 int genererTemps(int nbrTour){
-
-    int randomTime= rand() % (MAXTIMECOURSE + 1 - MINTIMECOURSE) + MINTIMECOURSE;
-
-    return randomTime;
-
+    return rand() % (MAXTIMECOURSE + 1 - MINTIMECOURSE) + MINTIMECOURSE;
 }
 
 int crachTest(){
-    if(rand()% PROBACRACH == 1){
-        return 1;
-    }else{
-        return 0;
-    }
+    if(rand()% PROBACRACH == 1) return 1;
+    return 0;
 }
 
 int getRandomSecteur(){

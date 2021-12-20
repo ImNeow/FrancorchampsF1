@@ -17,9 +17,8 @@ int tri(const void *a, const void *b){
         return 1;
     } else if(p1->bestLap < p2->bestLap){
         return -1;
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 int getBestSecteur(int secteur){
@@ -87,5 +86,3 @@ void afficheResult(Voiture *vdata){
     printf("Meilleur tour: %d [%.3f]\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
 
 }
-
-

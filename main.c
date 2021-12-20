@@ -17,14 +17,13 @@ int gettypeRace(char *argv[]);
 
 ///FONCTION MAIN
 int main(int argc, char *argv[]){
+    if (argc != 2){
+        printf("Veuillez passer 1 seul paramètre!\n");
+        exit(EXIT_FAILURE);
+    }
     Voiture *car ;
     int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
     int nbrTour= 50;
-
-    if (argc != 2){
-        perror("Veuillez passer 1 seul paramètre!");
-        exit(EXIT_FAILURE);
-    }
 
     int course_id = gettypeRace(argv);
 

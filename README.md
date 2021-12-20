@@ -9,7 +9,10 @@ Système d'exploitation : Linux
 
 Auteurs : [Tommy Riquet](https://github.com/Tommyriquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
 
-## 
+## Compile
+Pour compiler le projet `gcc *c`.
+
+## To Do
 
 Voici un tableau représentant les différentes tâches à effectuer :
 
