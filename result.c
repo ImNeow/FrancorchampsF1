@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 #include "config.h"
 #include "voiture.h"
 
@@ -65,14 +66,26 @@ int getBestLap(){
     return index;
 }
 
-
-
-void afficheResult(Voiture *vdata){
-	int f = open("score.txt", O_CREAT|O_APPEND);
+void saveToFile(Voiture copyCar[20]) {
+	int f = open("score.txt", O_CREAT|O_RDWR|O_APPEND, S_IRUSR | S_IWUSR);
 	if (f<0) {
-		perror("");
+		perror("FILE ERROR ");
+		return;
 	}
 	char buff[1024];
+
+    sprintf(buff,"\n\tBest S1: %d [%.3f]\t", copyCar[getBestSecteur(1)]->num, (float)copyCar[getBestSecteur(1)]->bestSecteur[0]/1000);
+	write(f,buff, strlen(buff));
+    sprintf(buff,"Best S2: %d [%.3f]\t", copyCar[getBestSecteur(2)]->num, (float)copyCar[getBestSecteur(1)]->bestSecteur[1]/1000);
+	write(f,buff, strlen(buff));
+	sprintf(buff,"Best S3: %d [%.3f]\t", copyCar[getBestSecteur(3)]->num, (float)copyCar[getBestSecteur(1)]->bestSecteur[2]/1000);
+	write(f,buff, strlen(buff));
+	sprintf(buff,"Meilleur tour: %d [%.3f]\n",copyCar[getBestLap()]->num, (float)copyCar[getBestLap()]->bestLap/1000);
+	write(f,buff, strlen(buff));
+	close(f);
+}
+
+void afficheResult(Voiture *vdata){
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
     }
@@ -80,35 +93,17 @@ void afficheResult(Voiture *vdata){
     printf("\n\n\n");
     printf("|\tPos.\t|\tNumero\t|\tSecteur 1\t|\tSecteur 2\t|\tSecteur 3\t|\tBestLap\t\t|\tTemps de course\t|\tTours\t|\tP\t|\tO\t|\n");
     
-	sprintf(buff,"\n\n\n");
-	write(f, buff, 1024);
-    sprintf(buff,"|\tPos.\t|\tNumero\t|\tSecteur 1\t|\tSecteur 2\t|\tSecteur 3\t|\tBestLap\t\t|\tTemps de course\t|\tTours\t|\tP\t|\tO\t|\n");
-	write(f, buff, 1024);
-
     for(int i=0; i<NBRTOTALVOITURE; i++){
         printf("|\t%d\t\t|%10d\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10d\t\t|\t%3d\t\t|\t%d\t|\t%d\t|\n",
 				i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000,
 				(float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,copyCar[i].tempTotal/1000,copyCar[i].tour,
 				copyCar[i].stand, copyCar[i].out);
-        sprintf(buff,"|\t%d\t\t|%10d\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10d\t\t|\t%3d\t\t|\t%d\t|\t%d\t|\n",
-				i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000,
-				(float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,copyCar[i].tempTotal/1000,copyCar[i].tour,
-				copyCar[i].stand, copyCar[i].out);
-	write(f, buff, 1024);
     }
 
+	saveToFile(&copyCar);
     printf("\n\tBest S1: %d [%.3f]\t", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
     printf("Best S2: %d [%.3f]\t", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
     printf("Best S3: %d [%.3f]\t", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
     printf("Meilleur tour: %d [%.3f]\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
     
-	sprintf(buff,"\n\tBest S1: %d [%.3f]\t", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
-	write(f, buff, 1024);
-    sprintf(buff,"Best S2: %d [%.3f]\t", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
-	write(f, buff, 1024);
-    sprintf(buff,"Best S3: %d [%.3f]\t", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
-	write(f, buff, 1024);
-    sprintf(buff,"Meilleur tour: %d [%.3f]\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
-	write(f, buff, 1024);
-	close(f);
 }
