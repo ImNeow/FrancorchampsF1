@@ -15,7 +15,6 @@ int TEMPSCOURSE = 0;
 
 int gettypeRace(char *argv[]);
 
-///FONCTION MAIN
 int main(int argc, char *argv[]){
     if (argc != 2){
         printf("Veuillez passer 1 seul paramètre!\n");
@@ -28,7 +27,7 @@ int main(int argc, char *argv[]){
     int course_id = gettypeRace(argv);
 
     if (course_id == -1){
-        printf("Erreur, parametre invalide");
+        printf("Erreur, parametre invalide\n");
         exit(EXIT_FAILURE);
     }else{
 
@@ -36,7 +35,7 @@ int main(int argc, char *argv[]){
         int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
         car = shmat(shmid, NULL, 0);
 
-        /*Tentative d'ajouter de sémaphores
+        /*Tentative d'ajout de sémaphores
         int shmid_sem = shmget(IPC_PRIVATE, sizeof(sem_t), 0666 | IPC_CREAT);
         sem_t *semaphore = shmat(shmid_sem, NULL, 0);
         sem_init(semaphore, 1,1);
