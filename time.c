@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include "config.h"
 
-// what purpose of nbrTour here ?
 int genererTemps(int nbrTour){
     return rand() % (MAXTIMECOURSE + 1 - MINTIMECOURSE) + MINTIMECOURSE;
 }
