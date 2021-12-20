@@ -66,23 +66,33 @@ int getBestLap(){
 
 
 void afficheResult(Voiture *vdata){
-
+	FILE* f = fopen("score.txt", "a+");
+	if (!f) {
+		perror("");
+	}
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
     }
     qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), tri);
     printf("\n\n\n");
     printf("|\tPos.\t|\tNumero\t|\tSecteur 1\t|\tSecteur 2\t|\tSecteur 3\t|\tBestLap\t\t|\tTemps de course\t|\tTours\t|\tP\t|\tO\t|\n");
+    
+	fprintf(f,"\n\n\n");
+    fprintf(f,"|\tPos.\t|\tNumero\t|\tSecteur 1\t|\tSecteur 2\t|\tSecteur 3\t|\tBestLap\t\t|\tTemps de course\t|\tTours\t|\tP\t|\tO\t|\n");
 
     for(int i=0; i<NBRTOTALVOITURE; i++){
-        printf("|\t%d\t\t|%10d\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10d\t\t|\t%3d\t\t|\t%d\t|\t%d\t|\n",
-               i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000, (float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,copyCar[i].tempTotal/1000,copyCar[i].tour, copyCar[i].stand, copyCar[i].out);
-
+        printf("|\t%d\t\t|%10d\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10d\t\t|\t%3d\t\t|\t%d\t|\t%d\t|\n", i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000, (float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,copyCar[i].tempTotal/1000,copyCar[i].tour, copyCar[i].stand, copyCar[i].out);
+        fprintf(f,"|\t%d\t\t|%10d\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10d\t\t|\t%3d\t\t|\t%d\t|\t%d\t|\n", i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000, (float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,copyCar[i].tempTotal/1000,copyCar[i].tour, copyCar[i].stand, copyCar[i].out);
     }
 
     printf("\n\tBest S1: %d [%.3f]\t", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
     printf("Best S2: %d [%.3f]\t", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
     printf("Best S3: %d [%.3f]\t", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
     printf("Meilleur tour: %d [%.3f]\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
-
+    
+	fprintf(f,"\n\tBest S1: %d [%.3f]\t", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
+    fprintf(f,"Best S2: %d [%.3f]\t", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
+    fprintf(f,"Best S3: %d [%.3f]\t", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
+    fprintf(f,"Meilleur tour: %d [%.3f]\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
+	fclose(f);
 }
