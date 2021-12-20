@@ -10,5 +10,6 @@ int tri(const void *a, const void *b);
 int getBestSecteur(int secteur);
 int getBestLap();
 int getDiff(int i);
+void saveToFile(Voiture *v,char *argv[]);
 
 #endif //PROJETOS_RESULT_H

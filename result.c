@@ -4,6 +4,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 #include "config.h"
 #include "voiture.h"
 
@@ -90,7 +93,6 @@ void afficheResult(Voiture *vdata){
                i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000, (float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,dif/1000,copyCar[i].tour, copyCar[i].stand, copyCar[i].out);
 
     }
-
     printf("\n\tBest S1: Voiture %d [%.3f]\t", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
     printf("Best S2: Voiture %d [%.3f]\t", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
     printf("Best S3: Voiture %d [%.3f]\t", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
@@ -98,4 +100,45 @@ void afficheResult(Voiture *vdata){
 
 }
 
+void saveToFile(Voiture *vdata,char *argv[]) {
+    int file;
+    for (int i=0; i<NBRTOTALVOITURE;i++) {
+        copyCar[i] = vdata[i];
+    }
+
+    if (strcmp(argv[1],"P1")==0) {
+        close(open("/home/tommy/FrancorchampsF1/result/P1", O_TRUNC));
+        file = open("/home/tommy/FrancorchampsF1/result/P1", O_RDWR);
+    }else if (strcmp(argv[1],"P2")==0) {
+        close(open("/home/tommy/FrancorchampsF1/result/P2", O_TRUNC));
+        file = open("/home/tommy/FrancorchampsF1/result/P2", O_RDWR);
+    }else if (strcmp(argv[1],"P3")==0) {
+        close(open("/home/tommy/FrancorchampsF1/result/P3", O_TRUNC));
+        file = open("/home/tommy/FrancorchampsF1/result/P3", O_RDWR);
+    }else if (strcmp(argv[1],"Q1")==0) {
+        close(open("/home/tommy/FrancorchampsF1/result/Q1", O_TRUNC));
+        file = open("/home/tommy/FrancorchampsF1/result/Q1", O_RDWR);
+    }else if (strcmp(argv[1],"Q2")==0) {
+        close(open("/home/tommy/FrancorchampsF1/result/Q2", O_TRUNC));
+        file = open("/home/tommy/FrancorchampsF1/result/Q2", O_RDWR);
+    }else {
+        close(open("/home/tommy/FrancorchampsF1/result/Q3", O_TRUNC));
+        file = open("/home/tommy/FrancorchampsF1/result/Q3", O_RDWR);
+    }
+
+    if (file<0) {
+        perror("FILE ERROR ");
+        return;
+    }
+    char buff[1024];
+
+    qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), tri);
+
+    for(int i =0 ; i<NBRTOTALVOITURE; i++){
+        sprintf(buff,"%d : %d\n",copyCar[i].num,copyCar[i].bestLap);
+        write(file,buff, strlen(buff));
+    }
+
+    close(file);
+}
 

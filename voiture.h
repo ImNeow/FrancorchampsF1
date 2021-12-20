@@ -7,7 +7,7 @@
 
 // VOITURE struct
 typedef struct voiture{
-    int status;             //status de la voiture : 0 = crach , 1 = stand , 2 = enCourse
+    int status;             //status de la voiture : 0 = enCourse, 1 = stand , 2 =crach
     int num;                //Numero de voiture
     int secteur[3];         //Chaque Secteur
     int bestSecteur[3];     //Best temps pour chaque secteur (n° = index+1)
