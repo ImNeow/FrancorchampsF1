@@ -5,9 +5,9 @@
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include "voiture.h"
 #include "config.h"
 #include "course.h"
-#include "voiture.h"
 #include "result.h"
 
 int NBRVOITURE = 0;

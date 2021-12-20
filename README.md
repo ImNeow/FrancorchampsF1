@@ -6,7 +6,7 @@ Cette application a été développé dans le cadre scolaire.
 
 Système d'exploitation : Linux
 
-Auteurs : [Tommy Riquet](https://github.com/Tommyriquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian), [4zv4l](https://github.com/4zv4l)
+Auteurs : [Tommy Riquet](https://github.com/Tommyriquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
 
 ## Compile
 
@@ -30,7 +30,7 @@ Voici un tableau représentant les différentes tâches à effectuer :
 |||
 | Affichage | Gérer et afficher les scores lors d'une course | Tommy Riquet
 | Affichage Best | Gérer et afficher les meilleurs scores lors d'une course | Tommy Riquet
-| Enregistrement | Enregistrer les résultats dans un fichier | Simon Blacks
+| Enregistrement | Enregistrer les résultats dans un fichier | ?
 |||
 | Rapport | Ecrire le rapport |
 
