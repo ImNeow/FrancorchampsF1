@@ -4,7 +4,7 @@
 
 #ifndef PROJET_CONFIG_H
 #define PROJET_CONFIG_H
-#define CHRONO_P1 1400
+#define CHRONO_P1 400
 #define CHRONO_P2 5400
 #define CHRONO_P3 3600
 #define CHRONO_Q1 1080

@@ -10,7 +10,7 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
     srand(getpid()+time(NULL));
 
     v->num = numVoiture;
-    v->status = 2;
+    v->status = 0;
     v->tour = 0;
     v->tempTotal = 0;
 
@@ -34,6 +34,7 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
                         v->secteur[2] = 0;
                 }
                 v->out = 1;
+                v->status = 2;
             }else{
                 v->secteur[0] = 0;
                 v->secteur[1] = 0;
@@ -52,9 +53,11 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
                 v->secteur[2] = genererTemps(v->tour)+randomStandTime();
                 v->probaStand = PROBASTAND*2;
                 v->stand = 1;
+                v->status = 1;
             }
             else{
                 v->stand = 0;
+                v->status = 0;
                 v->secteur[2] = genererTemps(v->tour);
             }
 

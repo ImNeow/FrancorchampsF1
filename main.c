@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
         {
             pid = fork();
             if (pid == 0){
-                break; // Sinon lance 400 processus ????
+                break;
 
             }
         }
@@ -65,11 +65,11 @@ int main(int argc, char *argv[]){
             exit(EXIT_SUCCESS);
         }
         else{
-            for(int j=0; j<nbrTour; j++){
+            while(car[0].tempTotal<TEMPSCOURSE*1000){
                 afficheResult(car);
                 sleep(DELAY);
             }
-
+            saveToFile(car,argv);
         }
 
 
