@@ -107,23 +107,17 @@ void saveToFile(Voiture *vdata,char *argv[]) {
     }
 
     if (strcmp(argv[1],"P1")==0) {
-        close(open("/home/tommy/FrancorchampsF1/result/P1", O_TRUNC));
-        file = open("/home/tommy/FrancorchampsF1/result/P1", O_RDWR);
+        file = open("/home/tommy/FrancorchampsF1/result/P1",O_WRONLY);
     }else if (strcmp(argv[1],"P2")==0) {
-        close(open("/home/tommy/FrancorchampsF1/result/P2", O_TRUNC));
-        file = open("/home/tommy/FrancorchampsF1/result/P2", O_RDWR);
+        file = open("/home/tommy/FrancorchampsF1/result/P2",O_WRONLY);
     }else if (strcmp(argv[1],"P3")==0) {
-        close(open("/home/tommy/FrancorchampsF1/result/P3", O_TRUNC));
-        file = open("/home/tommy/FrancorchampsF1/result/P3", O_RDWR);
+        file = open("/home/tommy/FrancorchampsF1/result/P3",O_WRONLY);
     }else if (strcmp(argv[1],"Q1")==0) {
-        close(open("/home/tommy/FrancorchampsF1/result/Q1", O_TRUNC));
-        file = open("/home/tommy/FrancorchampsF1/result/Q1", O_RDWR);
+        file = open("/home/tommy/FrancorchampsF1/result/Q1",O_WRONLY);
     }else if (strcmp(argv[1],"Q2")==0) {
-        close(open("/home/tommy/FrancorchampsF1/result/Q2", O_TRUNC));
-        file = open("/home/tommy/FrancorchampsF1/result/Q2", O_RDWR);
+        file = open("/home/tommy/FrancorchampsF1/result/Q2",O_WRONLY);
     }else {
-        close(open("/home/tommy/FrancorchampsF1/result/Q3", O_TRUNC));
-        file = open("/home/tommy/FrancorchampsF1/result/Q3", O_RDWR);
+        file = open("/home/tommy/FrancorchampsF1/result/Q3",O_WRONLY);
     }
 
     if (file<0) {

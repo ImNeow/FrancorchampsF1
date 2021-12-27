@@ -15,7 +15,6 @@ int TEMPSCOURSE = 0;
 
 int gettypeRace(char *argv[]);
 
-///FONCTION MAIN
 int main(int argc, char *argv[]){
     Voiture *car ;
     int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
@@ -48,10 +47,7 @@ int main(int argc, char *argv[]){
         for (i ; i < NBRTOTALVOITURE; i++)
         {
             pid = fork();
-            if (pid == 0){
-                break;
-
-            }
+            if (pid == 0) break;
         }
 
         if (pid == -1) {
@@ -126,8 +122,5 @@ int gettypeRace(char *argv[]) {
         return 7;
 
     }
-
-    else {
-        return -1;
-    }
+	return -1;
 }
