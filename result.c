@@ -84,20 +84,33 @@ void afficheResult(Voiture *vdata){
         copyCar[i] = vdata[i];
     }
     qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), tri);
-    printf("|\tPos.\t|\tNumero\t|\tSecteur 1\t|\tSecteur 2\t|\tSecteur 3\t|\tBestLap\t\t|\tDif\t\t|\tTours\t|\tP\t|\tO\t|\n");
+    printf("| %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s |\n",5,"Pos.",10,"Numero",10,"Secteur 1",10,"Secteur 2",10,"Secteur 3",10,"BestLap",10,"Dif",6,"Tours",3,"P",3,"O");
 
     for(int i=0; i<NBRTOTALVOITURE; i++){
         dif = getDiff(i);
 
-        printf("|\t%d\t\t|%10d\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%10f\t|\t%.4f\t|\t%3d\t\t|\t%d\t|\t%d\t|\n",
-               i+1, copyCar[i].num, (float)copyCar[i].secteur[0]/1000, (float)copyCar[i].secteur[1]/1000, (float)copyCar[i].secteur[2]/1000,(float)copyCar[i].bestLap/1000,dif/1000,copyCar[i].tour, copyCar[i].stand, copyCar[i].out);
+        printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*d | %*d |\n",
+               5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,(float)copyCar[i].bestLap/1000,10,dif/1000,6,copyCar[i].tour,3, copyCar[i].stand,3, copyCar[i].out);
 
     }
-    printf("\n\tBest S1: Voiture %d [%.3f]\t", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
-    printf("Best S2: Voiture %d [%.3f]\t", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
-    printf("Best S3: Voiture %d [%.3f]\t", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
-    printf("Meilleur tour: Voiture %d [%.3f]\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
+    for(int i=0;i<45;i++){
+        printf("_");
+    }
+    printf("\n| Meilleur tour |   Voiture %d\t [%.3f]   |\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
+    printf("|");
+    for(int i=0;i<43;i++){
+        printf("_");
+    }
+    printf("|");
+    printf("\n| Best S1  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
+    printf("| Best S2  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
+    printf("| Best S3  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
+    printf("|");
 
+    for(int i=0;i<43;i++){
+        printf("_");
+    }
+    printf("|\n");
 }
 
 void saveToFile(Voiture *vdata,char *argv[]) {
