@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
     int nbrTour= 50;
 
     if (argc != 2){
-        perror("Veuillez passer 1 seul paramètre!");
+        printf("Veuillez passer 1 seul paramètre!\n");
         exit(EXIT_FAILURE);
     }
 
