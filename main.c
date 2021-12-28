@@ -9,9 +9,11 @@
 #include "course.h"
 #include "voiture.h"
 #include "result.h"
+#include "final.h"
 
 int NBRVOITURE = 0;
 int TEMPSCOURSE = 0;
+int finalTours = FINALTOURS;
 
 int gettypeRace(char *argv[]);
 
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]){
             if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 || course_id == 6) {
                 course(&car[i],pilotes[i],TEMPSCOURSE);
             } else if (course_id == 7) {
-                //final();
+                final(&car[i],pilotes[i], finalTours);
             }
             exit(EXIT_SUCCESS);
         }
@@ -118,7 +120,7 @@ int gettypeRace(char *argv[]) {
 
     }
     else if(strcmp(argv[1], "F")  == 0) {
-        //A completer
+        NBRVOITURE = 20;
         return 7;
 
     }
