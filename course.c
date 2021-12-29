@@ -56,7 +56,7 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
                 v->status = 1;
             }
             else{
-                v->stand = 0;
+                v->stand = 0 ;
                 v->status = 0;
                 v->secteur[2] = genererTemps(v->tour);
             }

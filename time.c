@@ -1,6 +1,4 @@
-//
-// Created by tommy on 17/12/2021.
-//
+
 
 #include <stdlib.h>
 #include "config.h"

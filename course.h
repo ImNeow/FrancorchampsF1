@@ -1,6 +1,3 @@
-//
-// Created by tommy on 17/12/2021.
-//
 
 #ifndef PROJET_COURSE_H
 #define PROJET_COURSE_H

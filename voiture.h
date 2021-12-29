@@ -1,6 +1,3 @@
-//
-// Created by tommy on 17/12/2021.
-//
 
 #ifndef PROJETOS_VOITURE_H
 #define PROJETOS_VOITURE_H

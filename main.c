@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <stdbool.h>
 #include "config.h"
 #include "course.h"
 #include "voiture.h"
@@ -13,7 +14,6 @@
 
 int NBRVOITURE = 0;
 int TEMPSCOURSE = 0;
-int finalTours = FINALTOURS;
 
 int gettypeRace(char *argv[]);
 
@@ -59,17 +59,37 @@ int main(int argc, char *argv[]){
 
             if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 || course_id == 6) {
                 course(&car[i],pilotes[i],TEMPSCOURSE);
-            } else if (course_id == 7) {
-                final(&car[i],pilotes[i], finalTours);
+            } else if(course_id==7){
+                trierVoiture(car);
+                final(&car[i],pilotes[i]);
             }
             exit(EXIT_SUCCESS);
         }
         else{
-            while(car[0].tempTotal<TEMPSCOURSE*1000){
-                afficheResult(car);
-                sleep(DELAY);
+             bool courseFinished = false;
+             int compt = 0;
+            if(course_id<7){
+                while(!courseFinished){
+                    afficheResult(car);
+                    compt=0;
+                    for(int j=0;j<NBRVOITURE;j++){
+                        if(car[j].tempTotal>TEMPSCOURSE*1000 || car[j].status == 2){
+                            compt++;
+                        }
+                        if(compt==NBRVOITURE-1){
+                            courseFinished=true;
+                        }
+                    }
+                    sleep(DELAY);
+                }
+                saveToFile(car,argv);
+            } else{
+                while(car[0].tour<=FINALTOURS){
+                    afficheResultFinal(car);
+                    sleep(DELAY);
+                }
             }
-            saveToFile(car,argv);
+
         }
 
 
