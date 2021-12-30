@@ -21,7 +21,7 @@ Voici un tableau représentant les différentes tâches à effectuer :
 |||
 | Essai | Permettre aux processus de tourner lors de séances d'essai | Tommy Riquet
 | Qualifications | Permettre aux voitures de tourner lors de séances de qualifications | Tommy Riquet
-| Final | Permettre aux voitures de tourner lors de la séance final  | ?
+| Final | Permettre aux voitures de tourner lors de la séance final  | Tommy Riquet
 | Accidents | Gerer les accidents | Tommy Riquet
 | Arrèt au stand | Gerer les arrèts au stand | Tommy Riquet
 |||
