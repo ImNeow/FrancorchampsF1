@@ -94,4 +94,15 @@ void final(Voiture *v,int numVoiture) {
 
 void trierVoiture(Voiture *vdata){
 
+    int fd, sz;
+    char *c = (char *) calloc(100, sizeof(char));
+
+    fd = open("result/Q3", O_RDONLY);
+
+    read(fd, c, 20*sizeof(int));
+    printf("%s",c);
+
+
+    printf("%d",atoi(c));
+
 }

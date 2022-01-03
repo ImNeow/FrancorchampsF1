@@ -73,8 +73,8 @@ int tri(const void *a, const void *b){
 }
 
 int getDiff(int i){
-    if (i != 19){
-        return copyCar[i+1].bestLap - copyCar[i].bestLap;
+    if (i != 0 ){
+        return -(copyCar[i-1].bestLap - copyCar[i].bestLap);
     }else
     {
         return 0;
@@ -102,9 +102,10 @@ void afficheResult(Voiture *vdata){
 
     for(int i=0; i<NBRTOTALVOITURE; i++){
         dif = getDiff(i);
-
-        printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*d | %*d |\n",
-               5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,(float)copyCar[i].bestLap/1000,10,dif/1000,6,copyCar[i].tour,3, copyCar[i].stand,3, copyCar[i].out);
+        if(copyCar[i].num != 0){
+            printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*d | %*d |\n",
+                   5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,(float)copyCar[i].bestLap/1000,10,dif/1000,6,copyCar[i].tour,3, copyCar[i].stand,3, copyCar[i].out);
+        }
 
     }
     printf("|_______|____________|____________|____________|____________|____________|____________|________|_____|_____|\n");
@@ -208,7 +209,7 @@ void afficheResultFinal(Voiture *vdata){
 
 ///////////////////////////////////////////////////////////////////////////////////////////Saving to FILE
 
-void saveToFile(Voiture *vdata,char *argv[]) {
+void saveToFile(Voiture *vdata,char *argv[],int NBRVOITURE) {
     int file;
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
@@ -236,7 +237,7 @@ void saveToFile(Voiture *vdata,char *argv[]) {
 
     qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), tri);
 
-    for(int i =0 ; i<NBRTOTALVOITURE; i++){
+    for(int i =0 ; i<NBRVOITURE; i++){
         sprintf(buff,"%d\n",copyCar[i].num);
         write(file,buff, strlen(buff));
     }

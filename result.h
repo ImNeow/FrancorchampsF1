@@ -10,6 +10,6 @@ int triFinal(const void *a, const void *b);
 int getBestSecteur(int secteur);
 int getBestLap();
 int getDiff(int i);
-void saveToFile(Voiture *v,char *argv[]);
+void saveToFile(Voiture *v,char *argv[],int NBRVOItURE);
 
 #endif //PROJETOS_RESULT_H

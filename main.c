@@ -20,7 +20,6 @@ int gettypeRace(char *argv[]);
 int main(int argc, char *argv[]){
     Voiture *car ;
     int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
-    int nbrTour= 50;
 
     if (argc != 2){
         printf("Veuillez passer 1 seul paramètre!\n");
@@ -46,7 +45,7 @@ int main(int argc, char *argv[]){
 
         int i =0;
         pid_t pid;
-        for (i ; i < NBRTOTALVOITURE; i++)
+        for (i ; i < NBRVOITURE; i++)
         {
             pid = fork();
             if (pid == 0) break;
@@ -59,15 +58,14 @@ int main(int argc, char *argv[]){
 
             if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 || course_id == 6) {
                 course(&car[i],pilotes[i],TEMPSCOURSE);
-            } else if(course_id==7){
-                trierVoiture(car);
+            } else {
                 final(&car[i],pilotes[i]);
             }
             exit(EXIT_SUCCESS);
         }
         else{
-             bool courseFinished = false;
-             int compt = 0;
+            bool courseFinished = false;
+            int compt = 0;
             if(course_id<7){
                 while(!courseFinished){
                     afficheResult(car);
@@ -82,8 +80,9 @@ int main(int argc, char *argv[]){
                     }
                     sleep(DELAY);
                 }
-                saveToFile(car,argv);
+                saveToFile(car,argv,NBRVOITURE);
             } else{
+                //trierVoiture(car);
                 while(car[0].tour<=FINALTOURS){
                     afficheResultFinal(car);
                     sleep(DELAY);
@@ -144,5 +143,5 @@ int gettypeRace(char *argv[]) {
         return 7;
 
     }
-	return -1;
+    return -1;
 }
