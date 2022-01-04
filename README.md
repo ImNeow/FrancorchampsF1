@@ -3,32 +3,27 @@
 
 Projet de Simulation de circuit de Formule 1
 
+![image](https://user-images.githubusercontent.com/71312500/148054249-2b9c27d5-b378-415e-83b8-13587da95945.png)
+
 Cette application a été développé dans le cadre scolaire.  
 
 Système d'exploitation : Linux
 
-Auteurs : [Tommy Riquet](https://github.com/Tommyriquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
+Auteurs : [Tommy Riquet](https://github.com/ImNeow), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
+  
+  
 
-## 
+## Comment l'utiliser ?
 
-Voici un tableau représentant les différentes tâches à effectuer :
-
-| Tâche | Description | Fait par
-|:---:|:---:|:---:
-| Paramètres | Permettre au main d'être parametrer | Tommy Riquet
-| Fork | Ajouter les forks au programme | Tommy Riquet
-| sémaphores | Gérer les sémaphores | ?
-|||
-| Essai | Permettre aux processus de tourner lors de séances d'essai | Tommy Riquet
-| Qualifications | Permettre aux voitures de tourner lors de séances de qualifications | Tommy Riquet
-| Final | Permettre aux voitures de tourner lors de la séance final  | Tommy Riquet
-| Accidents | Gerer les accidents | Tommy Riquet
-| Arrèt au stand | Gerer les arrèts au stand | Tommy Riquet
-|||
-| Affichage | Gérer et afficher les scores lors d'une course | Tommy Riquet
-| Affichage Best | Gérer et afficher les meilleurs scores lors d'une course | Tommy Riquet
-| Enregistrement | Enregistrer les résultats dans un fichier | Tommy Riquet
-| Lecture | Lire et récuperer les résultats dans un fichier | ?
-|||
-| Rapport | Ecrire le rapport | ?
-
+1. Clone le repo
+   ```sh
+   git clone https://github.com/ImNeow/FrancorchampsF1.git
+   ```
+2. Build 
+    ```sh
+   gcc *c
+    ```
+3. Démarrer le prorgramme en choissisant un paramêtre (P1,P2,P3,Q1,Q2,Q3,F)
+    ```sh
+   ./a.out P1
+    ```
