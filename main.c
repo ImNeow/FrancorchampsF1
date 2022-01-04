@@ -14,12 +14,13 @@
 
 int NBRVOITURE = 0;
 int TEMPSCOURSE = 0;
+int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
 
 int gettypeRace(char *argv[]);
+void trierVoiture(Voiture *vdata,char *argv[]);
 
 int main(int argc, char *argv[]){
     Voiture *car ;
-    int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
 
     if (argc != 2){
         printf("Veuillez passer 1 seul paramètre!\n");
@@ -37,14 +38,10 @@ int main(int argc, char *argv[]){
         int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
         car = shmat(shmid, NULL, 0);
 
-        /*Tentative d'ajouter de sémaphores
-        int shmid_sem = shmget(IPC_PRIVATE, sizeof(sem_t), 0666 | IPC_CREAT);
-        sem_t *semaphore = shmat(shmid_sem, NULL, 0);
-        sem_init(semaphore, 1,1);
-        */
 
         int i =0;
         pid_t pid;
+        //trierVoiture(car,argv);
         for (i ; i < NBRVOITURE; i++)
         {
             pid = fork();
@@ -82,7 +79,6 @@ int main(int argc, char *argv[]){
                 }
                 saveToFile(car,argv,NBRVOITURE);
             } else{
-                //trierVoiture(car);
                 while(car[0].tour<=FINALTOURS){
                     afficheResultFinal(car);
                     sleep(DELAY);
@@ -144,4 +140,29 @@ int gettypeRace(char *argv[]) {
 
     }
     return -1;
+}
+
+void trierVoiture(Voiture *vdata,char *argv[]){
+
+    int file,pos[20];
+    char *str = malloc(sizeof(char)*200);
+    char *token;
+    int i = 0;
+
+    fopen("result/Q1","r");
+    close(file);
+
+    token = strtok(str, "\n");
+
+    while( token != NULL ) {
+        pos[i] = atoi(token);
+        for(int l=0;l<NBRVOITURE;l++){
+            if(atoi(token)==vdata[l].num){
+                printf("%d trouvé",vdata[i].num);
+            }
+        }
+        token = strtok(NULL, "\n");
+        i++;
+    }
+
 }

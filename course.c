@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <semaphore.h>
 #include "voiture.h"
 #include "config.h"
 #include "time.h"
@@ -13,6 +14,7 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
     v->status = 0;
     v->tour = 0;
     v->tempTotal = 0;
+    sleep(1);
 
     while (v->tempTotal < tempsCourse*1000) {
 
@@ -84,7 +86,6 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
                 v->bestLap = v->secteur[0] + v->secteur[1] + v->secteur[2];
             }
         }
-
 
         sleep(DELAY);
     }

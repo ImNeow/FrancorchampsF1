@@ -85,6 +85,8 @@ int getDiff(int i){
 void afficheResult(Voiture *vdata){
     float dif;
     system("clear");
+    char *stand;
+    char *out;
 
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
@@ -102,9 +104,19 @@ void afficheResult(Voiture *vdata){
 
     for(int i=0; i<NBRTOTALVOITURE; i++){
         dif = getDiff(i);
-        if(copyCar[i].num != 0){
-            printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*d | %*d |\n",
-                   5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,(float)copyCar[i].bestLap/1000,10,dif/1000,6,copyCar[i].tour,3, copyCar[i].stand,3, copyCar[i].out);
+        if(copyCar[i].stand==1){
+            stand="P";
+        }else{
+            stand=" ";
+        }
+        if(copyCar[i].out==1){
+            out="O";
+        }else{
+            out=" ";
+        }
+        if(copyCar[i].num > 0 && copyCar[i].num<100){
+            printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*s | %*s |\n",
+                   5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,(float)copyCar[i].bestLap/1000,10,dif/1000,6,copyCar[i].tour,3, stand,3, out);
         }
 
     }
@@ -170,6 +182,8 @@ int getDiffFinal(int i){
 
 void afficheResultFinal(Voiture *vdata){
     float dif;
+    char *stand;
+    char *out;
     system("clear");
 
     for (int i=0; i<NBRTOTALVOITURE;i++) {
@@ -178,22 +192,33 @@ void afficheResultFinal(Voiture *vdata){
     qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), triFinal);
 
     ///CREATION DU TABLEAU
-    for(int i=0;i<108;i++){
+    for(int i=0;i<95;i++){
         printf("_");
     }
     printf("\n");
-    printf("| %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s |\n",5,"Pos.",10,"Numero",10,"Secteur 1",10,"Secteur 2",10,"Secteur 3",10,"BestLap",10,"Dif",6,"Tours",3,"P",3,"O");
-    printf("|_______|____________|____________|____________|____________|____________|____________|________|_____|_____|\n");
+    printf("| %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s |\n",5,"Pos.",10,"Numero",10,"Secteur 1",10,"Secteur 2",10,"Secteur 3",10,"Dif",6,"Tours",3,"P",3,"O");
+    printf("|_______|____________|____________|____________|____________|____________|________|_____|_____|\n");
 
     for(int i=0; i<NBRTOTALVOITURE; i++){
         dif = getDiffFinal(i);
 
-        printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*d | %*d |\n",
-               5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,(float)copyCar[i].bestLap/1000,10,dif/1000,6,copyCar[i].tour,3, copyCar[i].stand,3, copyCar[i].out);
+        if(copyCar[i].stand==1){
+            stand="P";
+        }else{
+            stand=" ";
+        }
+        if(copyCar[i].out==1){
+            out="O";
+        }else{
+            out=" ";
+        }
+
+        printf("| %*d | %*d | %*.4f | %*.4f | %*.4f | %*.4f | %*d | %*s | %*s |\n",
+               5,i+1,10,copyCar[i].num,10,(float)copyCar[i].secteur[0]/1000,10, (float)copyCar[i].secteur[1]/1000,10,(float)copyCar[i].secteur[2]/1000,10,dif/1000,6,copyCar[i].tour,3, stand,3, out);
 
     }
 
-    printf("|_______|____________|____________|____________|____________|____________|____________|________|_____|_____|\n");
+    printf("|_______|____________|____________|____________|____________|____________|________|_____|_____|\n");
 
 
     printf("_____________________________________________");
