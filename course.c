@@ -16,7 +16,6 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
     v->status = 0;
     v->tour = 0;
     v->tempTotal = 0;
-    sleep(1);
 
     while (v->tempTotal < tempsCourse*1000) {
 
