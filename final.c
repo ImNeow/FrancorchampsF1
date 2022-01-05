@@ -10,6 +10,7 @@
 #include "config.h"
 #include "time.h"
 
+
 void final(Voiture *v,int numVoiture,sem_t *sem) {
 
     srand(getpid() + time(NULL));

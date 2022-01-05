@@ -6,6 +6,8 @@
 #include "config.h"
 #include "time.h"
 
+
+
 void course(Voiture *v,int numVoiture,int tempsCourse){
 
     srand(getpid()+time(NULL));

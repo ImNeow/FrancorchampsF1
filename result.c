@@ -90,6 +90,7 @@ void afficheResult(Voiture *vdata,sem_t *semaphore){
     char *out;
 
     sem_wait(semaphore);
+
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
     }
@@ -249,8 +250,27 @@ void saveToFile(Voiture *vdata,char *argv[],int NBRVOITURE) {
         file = open("result/Q1",O_WRONLY);
     }else if (strcmp(argv[1],"Q2")==0) {
         file = open("result/Q2",O_WRONLY);
-    }else {
+    }else if (strcmp(argv[1],"Q3")==0){
         file = open("result/Q3",O_WRONLY);
+    }else{
+        file = open("result/F",O_WRONLY);
+        if (file<0) {
+            perror("FILE ERROR ");
+            return;
+        }
+        char buff[1024];
+
+        qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), triFinal);
+
+        for(int i =0 ; i<NBRVOITURE; i++){
+            sprintf(buff,"N°%d\t|\t%d\n",i+1,copyCar[i].num);
+            write(file,buff, strlen(buff));
+        }
+
+        sprintf(buff,"\n Meilleur tour | Voiture %d\t [%.3f]   \n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
+        write(file, buff, strlen(buff));
+
+        close(file);
     }
 
     if (file<0) {

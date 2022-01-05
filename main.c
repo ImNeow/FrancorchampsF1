@@ -7,6 +7,7 @@
 #include <sys/shm.h>
 #include <stdbool.h>
 #include <semaphore.h>
+#include <fcntl.h>
 #include "config.h"
 #include "course.h"
 #include "voiture.h"
@@ -15,7 +16,8 @@
 
 int NBRVOITURE = 0;
 int TEMPSCOURSE = 0;
-int pilotes[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
+int pilotes[NBRTOTALVOITURE];  //Numéros de voitures
+
 
 int gettypeRace(char *argv[]);
 void trierVoiture(Voiture *vdata,char *argv[]);
@@ -47,7 +49,7 @@ int main(int argc, char *argv[]){
 
         int i =0;
         pid_t pid;
-        //trierVoiture(car,argv);
+        trierVoiture(car,argv);
         for (i ; i < NBRVOITURE; i++)
         {
             pid = fork();
@@ -89,11 +91,12 @@ int main(int argc, char *argv[]){
                     afficheResultFinal(car,semaphore);
                     compt=0;
                     for(int j=0;j<NBRVOITURE;j++){
-                        if(car[j].tour>=FINALTOURS || car[j].status == 2){
+                        if(car[j].tour==FINALTOURS || car[j].status == 2){
                             compt++;
                         }
                         if(compt==NBRVOITURE-1){
                             courseFinished=true;
+                            saveToFile(car,argv,NBRVOITURE);
                         }
                     }
                     sleep(DELAY);
@@ -166,20 +169,39 @@ void trierVoiture(Voiture *vdata,char *argv[]){
     char *token;
     int i = 0;
 
-    fopen("result/Q1","r");
-    close(file);
+    int pilote[NBRTOTALVOITURE] = {44,77,11,33,3,4,5,18,14,31,16,55,10,22,7,99,9,47,6,63};  //Numéros de voitures
 
-    token = strtok(str, "\n");
 
-    while( token != NULL ) {
-        pos[i] = atoi(token);
-        for(int l=0;l<NBRVOITURE;l++){
-            if(atoi(token)==vdata[l].num){
-                printf("%d trouvé",vdata[i].num);
-            }
+
+    if(strcmp(argv[1], "Q2" ) == 0 || strcmp(argv[1], "Q3" ) == 0 ){
+
+        if(strcmp(argv[1], "Q2" ) == 0){
+            file = open("result/Q1",O_RDONLY);
         }
-        token = strtok(NULL, "\n");
-        i++;
+        else if(strcmp(argv[1], "Q3" ) == 0){
+            file = open("result/Q2",O_RDONLY);
+        } else{
+            file = open("result/Q3",O_RDONLY);
+        }
+        read(file,str,sizeof(str)*256);
+        close(file);
+
+        token = strtok(str, "\n");
+
+        while( token != NULL ) {
+            pos[i] = atoi(token);
+            token = strtok(NULL, "\n");
+            i++;
+        }
+
+        for(int k=0;k<NBRVOITURE;k++){
+            pilotes[k] = pos[k];
+        }
+    }else{
+        for(int j=0;j<NBRVOITURE;j++){
+            pilotes[j] = pilote[j];
+        }
     }
+
 
 }
