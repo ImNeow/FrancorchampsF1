@@ -21,7 +21,7 @@ Auteurs : [Tommy Riquet](https://github.com/ImNeow), [Quentin Laruelle](https://
    ```
 2. Build 
     ```sh
-   gcc *c
+   gcc *c -pthread
     ```
 3. Démarrer le prorgramme en choissisant un paramêtre (P1,P2,P3,Q1,Q2,Q3,F)
     ```sh
