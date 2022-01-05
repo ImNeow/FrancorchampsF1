@@ -5,11 +5,12 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
+#include <semaphore.h>
 #include "voiture.h"
 #include "config.h"
 #include "time.h"
 
-void final(Voiture *v,int numVoiture) {
+void final(Voiture *v,int numVoiture,sem_t *sem) {
 
     srand(getpid() + time(NULL));
 
@@ -19,6 +20,8 @@ void final(Voiture *v,int numVoiture) {
     v->tempTotal = 0;
 
     while (v->tour <= FINALTOURS) {
+
+        sem_wait(sem);
 
         //Crach test
         if (crachTest() || v->out == 1) {
@@ -87,6 +90,7 @@ void final(Voiture *v,int numVoiture) {
             }
         }
 
+        sem_post(sem);
 
         sleep(DELAY);
 

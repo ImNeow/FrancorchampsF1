@@ -6,6 +6,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <stdbool.h>
+#include <semaphore.h>
 #include "config.h"
 #include "course.h"
 #include "voiture.h"
@@ -38,6 +39,11 @@ int main(int argc, char *argv[]){
         int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
         car = shmat(shmid, NULL, 0);
 
+        //sémaphore
+        int shmid_sem = shmget(IPC_PRIVATE, sizeof(sem_t), 0666 | IPC_CREAT);
+        sem_t *semaphore = shmat(shmid_sem, NULL, 0);
+        sem_init(semaphore, 1,1);
+
 
         int i =0;
         pid_t pid;
@@ -56,7 +62,7 @@ int main(int argc, char *argv[]){
             if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 || course_id == 6) {
                 course(&car[i],pilotes[i],TEMPSCOURSE);
             } else {
-                final(&car[i],pilotes[i]);
+                final(&car[i],pilotes[i],semaphore);
             }
             exit(EXIT_SUCCESS);
         }
@@ -65,7 +71,7 @@ int main(int argc, char *argv[]){
             int compt = 0;
             if(course_id<7){
                 while(!courseFinished){
-                    afficheResult(car);
+                    afficheResult(car,semaphore);
                     compt=0;
                     for(int j=0;j<NBRVOITURE;j++){
                         if(car[j].tempTotal>TEMPSCOURSE*1000 || car[j].status == 2){
@@ -79,8 +85,17 @@ int main(int argc, char *argv[]){
                 }
                 saveToFile(car,argv,NBRVOITURE);
             } else{
-                while(car[0].tour<=FINALTOURS){
-                    afficheResultFinal(car);
+                while(!courseFinished){
+                    afficheResultFinal(car,semaphore);
+                    compt=0;
+                    for(int j=0;j<NBRVOITURE;j++){
+                        if(car[j].tour>=FINALTOURS || car[j].status == 2){
+                            compt++;
+                        }
+                        if(compt==NBRVOITURE-1){
+                            courseFinished=true;
+                        }
+                    }
                     sleep(DELAY);
                 }
             }
@@ -91,6 +106,8 @@ int main(int argc, char *argv[]){
 
         shmdt(car); //Détachement de la mémoire partagée
         shmctl(shmid, IPC_RMID, NULL); //Suppression de la mémoire partagée
+
+        sem_destroy(semaphore);
         return 0;
     }
 

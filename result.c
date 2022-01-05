@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <semaphore.h>
 #include "config.h"
 #include "voiture.h"
 
@@ -82,15 +83,18 @@ int getDiff(int i){
 }
 
 
-void afficheResult(Voiture *vdata){
+void afficheResult(Voiture *vdata,sem_t *semaphore){
     float dif;
     system("clear");
     char *stand;
     char *out;
 
+    sem_wait(semaphore);
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
     }
+    sem_post(semaphore);
+
     qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), tri);
 
     ///CREATION DU TABLEAU
@@ -127,20 +131,12 @@ void afficheResult(Voiture *vdata){
         printf("_");
     }
     printf("\n| Meilleur tour |   Voiture %d\t [%.3f]   |\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
-    printf("|");
-    for(int i=0;i<43;i++){
-        printf("_");
-    }
-    printf("|");
+    printf("|_______________|___________________________|");
     printf("\n| Best S1  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
     printf("| Best S2  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
     printf("| Best S3  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
-    printf("|");
+    printf("|_______________|___________________________|\n");
 
-    for(int i=0;i<43;i++){
-        printf("_");
-    }
-    printf("|\n");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////FINAL
@@ -180,15 +176,18 @@ int getDiffFinal(int i){
 }
 
 
-void afficheResultFinal(Voiture *vdata){
+void afficheResultFinal(Voiture *vdata,sem_t *semaphore){
     float dif;
     char *stand;
     char *out;
     system("clear");
 
+    sem_wait(semaphore);
     for (int i=0; i<NBRTOTALVOITURE;i++) {
         copyCar[i] = vdata[i];
     }
+    sem_post(semaphore);
+
     qsort(copyCar, NBRTOTALVOITURE, sizeof(Voiture), triFinal);
 
     ///CREATION DU TABLEAU
