@@ -1,7 +1,7 @@
 
 
-#ifndef PROJETOS_TIME_H
-#define PROJETOS_TIME_H
+#ifndef PROJETOS_TEMPS_H
+#define PROJETOS_TEMPS_H
 
 int genererTemps(int nbrTour);
 int crachTest();
@@ -9,4 +9,4 @@ int getRandomSecteur();
 int stand();
 int randomStandTime();
 
-#endif //PROJETOS_TIME_H
+#endif //PROJETOS_TEMPS_H

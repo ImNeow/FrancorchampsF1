@@ -1,5 +1,3 @@
-
-
 #include <stdlib.h>
 #include "config.h"
 
@@ -17,7 +15,7 @@ int crachTest(){
 }
 
 int getRandomSecteur(){
-    return rand()%3+1;
+    return rand() % (3 + 1 - 1) + 1;
 }
 
 int stand(){

@@ -8,45 +8,52 @@
 #include <semaphore.h>
 #include "voiture.h"
 #include "config.h"
-#include "time.h"
+#include "temps.h"
 
 
 void final(Voiture *v,int numVoiture,sem_t *sem) {
 
     srand(getpid() + time(NULL));
 
+    sem_wait(sem);
     v->num = numVoiture;
     v->status = 0;
     v->tour = 0;
     v->tempTotal = 0;
+    sem_post(sem);
 
-    while (v->tour <= FINALTOURS) {
+
+    while (v->tour <= FINALTOURS - 1) {
 
         sem_wait(sem);
 
         //Crach test
         if (crachTest() || v->out == 1) {
             if (v->out != 1) {
-                switch (getRandomSecteur()) {
+                switch(getRandomSecteur()) {
                     case 1 :
                         v->secteur[0] = 0;
                         v->secteur[1] = 0;
                         v->secteur[2] = 0;
+                        v->out = 1;
+                        v->status = 2;
+                        break;
                     case 2 :
                         v->secteur[0] = genererTemps(v->tour);
                         v->secteur[1] = 0;
                         v->secteur[2] = 0;
+                        v->out = 1;
+                        v->status = 2;
+                        break;
                     case 3 :
                         v->secteur[0] = genererTemps(v->tour);
                         v->secteur[1] = genererTemps(v->tour);
                         v->secteur[2] = 0;
+                        v->out = 1;
+                        v->status = 2;
+                        break;
                 }
-                v->out = 1;
-                v->status = 2;
-            } else {
-                v->secteur[0] = 0;
-                v->secteur[1] = 0;
-                v->secteur[2] = 0;
+
             }
 
         } else {

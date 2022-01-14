@@ -4,7 +4,7 @@
 #include <semaphore.h>
 #include "voiture.h"
 #include "config.h"
-#include "time.h"
+#include "temps.h"
 
 
 
@@ -27,23 +27,26 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
                         v->secteur[0] = 0;
                         v->secteur[1] = 0;
                         v->secteur[2] = 0;
+                        v->out = 1;
+                        v->status = 2;
+                        break;
                     case 2 :
                         v->secteur[0] = genererTemps(v->tour);
                         v->secteur[1] = 0;
                         v->secteur[2] = 0;
+                        v->out = 1;
+                        v->status = 2;
+                        break;
                     case 3 :
                         v->secteur[0] = genererTemps(v->tour);
                         v->secteur[1] = genererTemps(v->tour);
                         v->secteur[2] = 0;
+                        v->out = 1;
+                        v->status = 2;
+                        break;
                 }
-                v->out = 1;
-                v->status = 2;
-            }else{
-                v->secteur[0] = 0;
-                v->secteur[1] = 0;
-                v->secteur[2] = 0;
-            }
 
+            }
         }
         else{
 

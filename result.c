@@ -145,7 +145,7 @@ int triFinal(const void *a, const void *b){
     const Voiture *p1 = (Voiture *) a;
     const Voiture *p2 = (Voiture *) b;
 
-    if(p1->status==2){
+    if(p1->status==2 && p1->tour < p2->tour){
         return 1;
     }
     else if(p2->status==2){

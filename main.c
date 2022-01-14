@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
                             saveToFile(car,argv,NBRVOITURE);
                         }
                     }
-                    sleep(DELAY);
+                sleep(DELAY);
                 }
             }
 
