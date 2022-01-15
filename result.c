@@ -74,7 +74,7 @@ int tri(const void *a, const void *b){
 }
 
 int getDiff(int i){
-    if (i != 0 ){
+    if (i != 0 && copyCar[i].bestLap != 0){
         return -(copyCar[i-1].bestLap - copyCar[i].bestLap);
     }else
     {

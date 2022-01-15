@@ -6,21 +6,23 @@
 #include "config.h"
 #include "temps.h"
 
-
-
-void course(Voiture *v,int numVoiture,int tempsCourse){
+void course(Voiture *v,int numVoiture,int tempsCourse,sem_t *sem){
 
     srand(getpid()+time(NULL));
 
+    sem_wait(sem);
     v->num = numVoiture;
     v->status = 0;
     v->tour = 0;
     v->tempTotal = 0;
+    sem_post(sem);
+
 
     while (v->tempTotal < tempsCourse*1000) {
 
-        //Crach test
-        if(crachTest() || v->out == 1){
+        sem_wait(sem);
+
+        if(crachTest() || v->out == 1){//Si crach
             if(v->out!=1){
                 switch (getRandomSecteur()) {
                     case 1 :
@@ -48,7 +50,7 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
 
             }
         }
-        else{
+        else{//Si pas crach
 
             v->secteur[0] = genererTemps(v->tour);
             v->secteur[1] = genererTemps(v->tour);
@@ -90,6 +92,7 @@ void course(Voiture *v,int numVoiture,int tempsCourse){
                 v->bestLap = v->secteur[0] + v->secteur[1] + v->secteur[2];
             }
         }
+        sem_post(sem);
 
         sleep(DELAY);
     }

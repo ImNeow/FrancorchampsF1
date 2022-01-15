@@ -2,8 +2,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
-#include <fcntl.h>
 #include <string.h>
 #include <semaphore.h>
 #include "voiture.h"
@@ -27,8 +25,7 @@ void final(Voiture *v,int numVoiture,sem_t *sem) {
 
         sem_wait(sem);
 
-        //Crach test
-        if (crachTest() || v->out == 1) {
+        if (crachTest() || v->out == 1) {//Si crach
             if (v->out != 1) {
                 switch(getRandomSecteur()) {
                     case 1 :
@@ -56,7 +53,7 @@ void final(Voiture *v,int numVoiture,sem_t *sem) {
 
             }
 
-        } else {
+        } else {//Si pas crach
 
             v->secteur[0] = genererTemps(v->tour);
             v->secteur[1] = genererTemps(v->tour);

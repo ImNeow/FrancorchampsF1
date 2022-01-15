@@ -14,13 +14,14 @@
 #include "result.h"
 #include "final.h"
 
-int NBRVOITURE = 0;
-int TEMPSCOURSE = 0;
-int pilotes[NBRTOTALVOITURE];  //Numéros de voitures
+int NBRVOITURE = 0;             //Nombre de voiture dans la course selectionée
+int TEMPSCOURSE = 0;            //Temps de la course selectionnée
+int pilotes[NBRTOTALVOITURE];   //Numéros de voitures
 
 
 int gettypeRace(char *argv[]);
 void trierVoiture(Voiture *vdata,char *argv[]);
+
 
 int main(int argc, char *argv[]){
     Voiture *car ;
@@ -33,124 +34,128 @@ int main(int argc, char *argv[]){
     int course_id = gettypeRace(argv);
 
     if (course_id == -1){
-        printf("Erreur, parametre invalide");
+        printf("Erreur, parametre invalide\n");
         exit(EXIT_FAILURE);
-    }else{
+    }else {
 
         //Création de la mémoire partagée
         int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
+        //attache la mémoire à car
         car = shmat(shmid, NULL, 0);
 
-        //sémaphore
+        //création et initiation du sémaphore
         int shmid_sem = shmget(IPC_PRIVATE, sizeof(sem_t), 0666 | IPC_CREAT);
         sem_t *semaphore = shmat(shmid_sem, NULL, 0);
-        sem_init(semaphore, 1,1);
+        sem_init(semaphore, 1, 1);
 
 
-        int i =0;
+        int i = 0;
         pid_t pid;
-        trierVoiture(car,argv);
-        for (i ; i < NBRVOITURE; i++)
-        {
+        trierVoiture(car, argv);
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        //Processus Fils
+        for (i; i < NBRVOITURE; i++) {
             pid = fork();
             if (pid == 0) break;
         }
-
         if (pid == -1) {
             perror("Erreur lors du fork !");
             exit(EXIT_FAILURE);
-        } else if(pid == 0) {
+        } else if (pid == 0) {
 
-            if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 || course_id == 6) {
-                course(&car[i],pilotes[i],TEMPSCOURSE);
+            if (course_id == 1 || course_id == 2 || course_id == 3 || course_id == 4 || course_id == 5 ||
+                course_id == 6) {
+                course(&car[i], pilotes[i], TEMPSCOURSE, semaphore);
             } else {
-                final(&car[i],pilotes[i],semaphore);
+                final(&car[i], pilotes[i], semaphore);
             }
             exit(EXIT_SUCCESS);
         }
-        else{
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //Proccessus Père
+        else {
             bool courseFinished = false;
             int compt = 0;
-            if(course_id<7){
-                while(!courseFinished){
-                    afficheResult(car,semaphore);
-                    compt=0;
-                    for(int j=0;j<NBRVOITURE;j++){
-                        if(car[j].tempTotal>TEMPSCOURSE*1000 || car[j].status == 2){
+            while (!courseFinished) {
+                if (course_id < 7) {//Si pas Final
+                    afficheResult(car, semaphore);
+
+                    compt = 0;
+                    for (int j = 0; j < NBRVOITURE; j++) {
+                        if (car[j].tempTotal > TEMPSCOURSE * 1000 || car[j].status == 2) {
                             compt++;
                         }
-                        if(compt==NBRVOITURE-1){
-                            courseFinished=true;
+                        if (compt == NBRVOITURE - 1) {
+                            courseFinished = true;
                         }
                     }
+
+                    sleep(DELAY);
+
+                } else {//Si Final
+                    afficheResultFinal(car, semaphore);
+
+                    compt = 0;
+                    for (int j = 0; j < NBRVOITURE; j++) {
+                        if (car[j].tour == FINALTOURS || car[j].status == 2) {
+                            compt++;
+                        }
+                        if (compt == NBRVOITURE - 1) {
+                            courseFinished = true;
+                        }
+                    }
+
                     sleep(DELAY);
                 }
-                saveToFile(car,argv,NBRVOITURE);
-            } else{
-                while(!courseFinished){
-                    afficheResultFinal(car,semaphore);
-                    compt=0;
-                    for(int j=0;j<NBRVOITURE;j++){
-                        if(car[j].tour==FINALTOURS || car[j].status == 2){
-                            compt++;
-                        }
-                        if(compt==NBRVOITURE-1){
-                            courseFinished=true;
-                            saveToFile(car,argv,NBRVOITURE);
-                        }
-                    }
-                sleep(DELAY);
-                }
             }
+            saveToFile(car, argv, NBRVOITURE);
 
+
+            shmdt(car); //Détachement des voitures de la mémoire partagée
+            shmctl(shmid, IPC_RMID, NULL); //Suppression de la mémoire partagée
+
+            sem_destroy(semaphore);
+            exit(EXIT_SUCCESS);
         }
-
-
-
-        shmdt(car); //Détachement de la mémoire partagée
-        shmctl(shmid, IPC_RMID, NULL); //Suppression de la mémoire partagée
-
-        sem_destroy(semaphore);
-        return 0;
     }
-
 }
 
 int gettypeRace(char *argv[]) {
 
     if(strcmp(argv[1], "P1" ) == 0){
         NBRVOITURE = 20;
-        TEMPSCOURSE = CHRONO_P1;
+        TEMPSCOURSE = TEMPS_P1;
         return 1;
 
     }
     else if(strcmp(argv[1], "P2") == 0) {
         NBRVOITURE = 20;
-        TEMPSCOURSE = CHRONO_P2;
+        TEMPSCOURSE = TEMPS_P2;
         return 2;
 
     }
     else if(strcmp(argv[1], "P3") == 0) {
         NBRVOITURE = 20;
-        TEMPSCOURSE = CHRONO_P3;
+        TEMPSCOURSE = TEMPS_P3;
         return 3;
 
     }
     else if(strcmp(argv[1], "Q1") == 0) {
         NBRVOITURE = 20;
-        TEMPSCOURSE = CHRONO_Q1;
+        TEMPSCOURSE = TEMPS_Q1;
         return 4;
 
     }
     else if(strcmp(argv[1], "Q2") == 0) {
         NBRVOITURE = 15;
-        TEMPSCOURSE = CHRONO_Q2;
+        TEMPSCOURSE = TEMPS_Q2;
         return 5;
 
     }
     else if(strcmp(argv[1], "Q3")  == 0) {
         NBRVOITURE = 10;
-        TEMPSCOURSE = CHRONO_Q3;
+        TEMPSCOURSE = TEMPS_Q3;
         return 6;
 
     }
