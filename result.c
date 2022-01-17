@@ -134,8 +134,8 @@ void afficheResult(Voiture *vdata,sem_t *semaphore){
     printf("\n| Meilleur tour |   Voiture %d\t [%.3f]   |\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
     printf("|_______________|___________________________|");
     printf("\n| Best S1  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
-    printf("| Best S2  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
-    printf("| Best S3  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
+    printf("| Best S2  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(2)].bestSecteur[1]/1000);
+    printf("| Best S3  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(3)].bestSecteur[2]/1000);
     printf("|_______________|___________________________|\n");
 
 }
@@ -225,8 +225,8 @@ void afficheResultFinal(Voiture *vdata,sem_t *semaphore){
     printf("\n| Meilleur tour |   Voiture %d\t [%.3f]   |\n",copyCar[getBestLap()].num, (float)copyCar[getBestLap()].bestLap/1000);
     printf("|_______________|___________________________|");
     printf("\n| Best S1  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(1)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[0]/1000);
-    printf("| Best S2  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[1]/1000);
-    printf("| Best S3  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(1)].bestSecteur[2]/1000);
+    printf("| Best S2  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(2)].num, (float)copyCar[getBestSecteur(2)].bestSecteur[1]/1000);
+    printf("| Best S3  \t|   Voiture %d\t [%.3f]   |\n", copyCar[getBestSecteur(3)].num, (float)copyCar[getBestSecteur(3)].bestSecteur[2]/1000);
     printf("|_______________|___________________________|\n");
 }
 

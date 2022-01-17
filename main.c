@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
     int course_id = gettypeRace(argv);
 
     if (course_id == -1){
-        printf("Erreur, parametre invalide\n");
+        printf("Erreur, parametre invalide (P1, P2, P3, Q1, Q2, Q3, F)\n");
         exit(EXIT_FAILURE);
     }else {
 
