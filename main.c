@@ -38,9 +38,9 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }else {
 
-        //Création de la mémoire partagée
+        //alloue un segment de la mémoire partagée
         int shmid = shmget(IPC_PRIVATE, sizeof(Voiture) * NBRTOTALVOITURE, 0666 | IPC_CREAT);
-        //attache la mémoire à car
+        //attache le segment de mémoire partagée à car
         car = shmat(shmid, NULL, 0);
 
         //création et initiation du sémaphore
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]){
             saveToFile(car, argv, NBRVOITURE);
 
 
-            shmdt(car); //Détachement des voitures de la mémoire partagée
+            shmdt(car); //Détachement du segment de mémoire partagée
             shmctl(shmid, IPC_RMID, NULL); //Suppression de la mémoire partagée
 
             sem_destroy(semaphore);
