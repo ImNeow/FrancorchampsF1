@@ -9,7 +9,7 @@ Cette application a été développé dans le cadre scolaire.
 
 Système d'exploitation : Linux
 
-Auteurs : [Tommy Riquet](https://github.com/ImNeow), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
+Auteurs : [Tommy Riquet](https://github.com/TommyRiquet), [Quentin Laruelle](https://github.com/QuentinLaruelle), [Sebastian Dziemianko](https://github.com/DziemiankoSebastian)
   
   
 
@@ -17,7 +17,7 @@ Auteurs : [Tommy Riquet](https://github.com/ImNeow), [Quentin Laruelle](https://
 
 1. Clone le repo
    ```sh
-   git clone https://github.com/ImNeow/FrancorchampsF1.git
+   git clone https://github.com/TommyRiquet/FrancorchampsF1.git
    ```
 2. Build 
     ```sh
